@@ -11,7 +11,7 @@ Run this checklist **after all sections are drafted** and the paper compiles. Th
 Most top-tier SE venues with double columns allow 10 pages of body content + 1--2 pages of references (often 12 total). References usually do **not** count toward the body limit, but always verify the specific CFP.
 For single-column journals, limits are usually larger (often 18--20 body pages plus references), but this also varies by venue.
 
-**Check:** Compile the PDF and count body pages (from first page of introduction through end of conclusion, including abstract on page 1). The body must fit within the venue limit. 
+**Check:** Compile the PDF and count body pages (from first page of introduction through end of conclusion, including abstract on page 1). It is mandantory that the body not only must fit within the venue limit, but also should be exactly at the max length. 
 
 See [common/venue-requirements.md](../common/venue-requirements.md) for full venue details.
 
@@ -25,7 +25,7 @@ Compare actual page lengths against the recommended allocation. Flag any section
 |---------|--------|------------------|--------------------|
 | Abstract + Intro | 2 pages | 1.5–2.5 | Introduction is rambling |
 | Background & Motivation | 1.25 pages | 1–1.5 | Too much tutorial content |
-| Methodology | 2.5 pages | 2–3 | Missing detail OR bloated |
+| Methodology | 4 pages | 3-5 | Missing detail OR bloated |
 | Implementation | 0.5 pages | 0.25–0.75 | Either too thin or over-detailed |
 | Evaluation | 3 pages | 2.5–4 | Most important — can flex up |
 | Discussion (Threats) | 0.5 pages | 0.25–0.75 | Should not exceed 0.75 |
@@ -316,6 +316,7 @@ exiftool -all= paper.pdf
 - [ ] Evaluation is the longest section (or tied with methodology)
 - [ ] Related work is not the longest section
 - [ ] Conclusion is under 0.5 pages
+- [ ] The total page by default should be exactly long as the page limit (10 for double columnor 18 for single column) and there should be not be any over or any shorter. If the total page is not exactly the max limit, consider the following reviewr focus to expand critical sections with more detailed elaborations.
 
 ### Reviewer Focus
 - [ ] Identified paper identity (technique / empirical / tool / LLM-based)

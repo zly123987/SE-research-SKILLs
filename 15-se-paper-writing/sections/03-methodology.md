@@ -280,7 +280,7 @@ Ensure the novel subsection addresses challenges from the Introduction.
 - **Problem formalization**: 0.25-0.5 pages
 - **Approach overview**: 0.5 pages (with figure)
 - **Component details**: 1.5-2 pages total
-- **Total**: 2-3 pages
+- **Total**: 3-5 pages typical 4-4.5
 
 ## Common Mistakes
 
