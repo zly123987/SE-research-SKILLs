@@ -28,6 +28,7 @@ This skill is organized into modular files for easy reference:
 | Related Work | [sections/06-related-work.md](sections/06-related-work.md) | Organization, differentiation, depth |
 | Conclusion | [sections/07-conclusion.md](sections/07-conclusion.md) | Summary and future work |
 | **Final Check** | [sections/08-final-check.md](sections/08-final-check.md) | Whole-paper audit: page budget, reviewer focus, claim traceability, language quality |
+| **Artifact Repo** | [sections/09-artifact-repository.md](sections/09-artifact-repository.md) | Standalone anonymous repo setup, README template, anonymization, GitHub push |
 
 ### Common Guidelines
 | Topic | File | Description |

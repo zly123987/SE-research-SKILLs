@@ -11,7 +11,7 @@ Run this checklist **after all sections are drafted** and the paper compiles. Th
 Most top-tier SE venues with double columns allow 10 pages of body content + 1--2 pages of references (often 12 total). References usually do **not** count toward the body limit, but always verify the specific CFP.
 For single-column journals, limits are usually larger (often 18--20 body pages plus references), but this also varies by venue.
 
-**Check:** Compile the PDF and count body pages (from first page of introduction through end of conclusion, including abstract on page 1). It is mandantory that the body not only must fit within the venue limit, but also should be exactly at the max length. 
+**Check:** Compile the PDF and count body pages (from first page of introduction through end of conclusion, including abstract on page 1). It is mandantory that the body not only must fit within the venue limit, but also should be exactly at the max length. Be very careful of the page limit of the submission version (usually 10) should be respected instead of the final camera-ready (11).
 
 See [common/venue-requirements.md](../common/venue-requirements.md) for full venue details.
 
@@ -349,4 +349,4 @@ exiftool -all= paper.pdf
 - [ ] No LaTeX overfull/underfull warnings in body text
 - [ ] PDF metadata stripped for double-blind
 
-[← Conclusion](07-conclusion.md) | [Back to Main →](../SKILL.md)
+[← Conclusion](07-conclusion.md) | [Next: Artifact Repository →](09-artifact-repository.md)
