@@ -52,7 +52,9 @@ This skill is organized into modular files for easy reference:
 ### Scripts & Automation
 | Script | File | Description |
 |--------|------|-------------|
-| **Visual Overflow Checker** | [scripts/check_visual_overflow.py](scripts/check_visual_overflow.py) | Post-compilation PDF visual inspection using Claude vision. Detects text/table/figure overflow, applies fixes, recompiles until clean. Integrated into `compile_and_fix_loop()` automatically. |
+| **Post-Process Pipeline** | [scripts/postprocess_paper.py](scripts/postprocess_paper.py) | 13-step automated cleanup: BibTeX sanitization, citation normalization, TikZ validation, LaTeX syntax fixing, dangling citation removal. Run after paper is drafted, before final compilation. Use `--visual` to add Claude Vision overflow check. |
+| **Visual Overflow Checker** | [scripts/check_visual_overflow.py](scripts/check_visual_overflow.py) | Post-compilation PDF visual inspection using Claude Vision via Agent SDK. Detects text/table/figure overflow, applies fixes, recompiles until clean. Called automatically by `postprocess_paper.py --visual`. |
+| **Post-Process Module** | [scripts/tex_postprocess/](scripts/tex_postprocess/) | Self-contained Python package (stdlib only, no external deps) implementing all 13 pipeline steps. Bundled locally so the skill works standalone without `research_agency` installed. Key modules: `post_process.py` (orchestrator), `bib_sanitizer.py`, `normalize_citations.py`, `tex_checker.py`, `tikz_visual_validator.py`. |
 
 ---
 

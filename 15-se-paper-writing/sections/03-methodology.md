@@ -86,7 +86,7 @@ Do NOT use formulas when:
 
 ### 2. Methodology Overview (second subsection)
 
-Provide a high-level overview before diving into details:
+Provide a high-level overview before diving into details. **Always include a TikZ architecture figure** — reviewers expect a visual overview in the methodology section. Use the templates below.
 
 ```latex
 \subsection{Overview}
@@ -104,6 +104,175 @@ analysis catches constraint violations visible in files, dynamic
 validation catches transitive conflicts, and LLM reasoning catches
 semantic conflicts requiring ecosystem knowledge.
 ```
+
+### TikZ Architecture Figure Templates
+
+Always use TikZ for architecture/overview figures — it produces vector graphics that scale cleanly and look professional. Avoid tcolorbox/tabular-based diagrams or screenshots. The postprocess pipeline (`postprocess_paper.py`) validates TikZ blocks and wraps them in `\resizebox` to prevent column overflow.
+
+**Required packages** (add to preamble):
+```latex
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows.meta,positioning,calc,fit,backgrounds}
+```
+
+#### Template 1: Linear Pipeline (3-5 stages)
+
+For tools with sequential stages (most common in SE papers):
+
+```latex
+\begin{figure}[t]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+    node distance=0.6cm,
+    stage/.style={
+        rectangle, rounded corners=3pt, draw=black!70, fill=blue!8,
+        minimum width=5.8cm, minimum height=1.1cm, align=center,
+        font=\small
+    },
+    io/.style={font=\small\bfseries, align=center},
+    arr/.style={-{Stealth[length=5pt]}, thick, black!60},
+]
+% Input
+\node[io] (input) {\textbf{Input:} Vulnerability report $v$ + Repository $R$};
+
+% Stages
+\node[stage, below=of input] (s1)
+    {\textbf{Stage 1: Context Extraction}\\
+     Issue metadata $\cdot$ Dependency tree $\cdot$ Env profile};
+\node[stage, below=of s1] (s2)
+    {\textbf{Stage 2: RAG Retrieval}\\
+     Top-5 similar resolutions from 3,899 indexed issues};
+\node[stage, below=of s2] (s3)
+    {\textbf{Stage 3: Tactic-Aware Router}\\
+     Classify $\rightarrow$ \{AdjVer, Patch, AltLib, ChgConfig, Bypass, Re-init\}};
+\node[stage, below=of s3, fill=green!8] (s4)
+    {\textbf{Stage 4: Expert Agent}\\
+     Code-grounded generation $\rightarrow$ Apply \& Test $\rightarrow$ Retry};
+
+% Output
+\node[io, below=of s4] (output) {\textbf{Output:} Remediation $r = \langle E, C \rangle$ or \textsc{Failure}};
+
+% Arrows
+\draw[arr] (input) -- (s1);
+\draw[arr] (s1) -- (s2);
+\draw[arr] (s2) -- (s3);
+\draw[arr] (s3) -- (s4);
+\draw[arr] (s4) -- (output);
+
+% Retry loop
+\draw[arr, dashed] (s4.east) -- ++(0.6,0) |- ([yshift=-0.15cm]s4.north east)
+    node[pos=0.25, right, font=\scriptsize] {retry};
+\end{tikzpicture}
+}% end resizebox
+\caption{Overview of the \tool{} pipeline.}
+\label{fig:architecture}
+\end{figure}
+```
+
+#### Template 2: Parallel Branches (fan-out/fan-in)
+
+For tools with parallel processing, multi-agent, or ensemble approaches:
+
+```latex
+\begin{figure}[t]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+    node distance=0.5cm and 0.4cm,
+    stage/.style={
+        rectangle, rounded corners=3pt, draw=black!70, fill=blue!8,
+        minimum width=3.2cm, minimum height=0.9cm, align=center,
+        font=\small
+    },
+    agent/.style={
+        rectangle, rounded corners=3pt, draw=black!70, fill=orange!10,
+        minimum width=2.2cm, minimum height=0.9cm, align=center,
+        font=\small
+    },
+    arr/.style={-{Stealth[length=5pt]}, thick, black!60},
+]
+% Shared stages
+\node[stage] (extract) {\textbf{Context Extraction}};
+\node[stage, below=0.8cm of extract] (rag) {\textbf{RAG Retrieval}};
+
+% Fan-out: parallel agents
+\node[agent, below left=0.8cm and 1.2cm of rag]  (a1) {Agent A};
+\node[agent, below left=0.8cm and 0cm of rag]     (a2) {Agent B};
+\node[agent, below right=0.8cm and 0cm of rag]    (a3) {Agent C};
+\node[agent, below right=0.8cm and 1.2cm of rag]  (a4) {Agent D};
+
+% Fan-in: ranker
+\node[stage, below=0.8cm of $(a2)!0.5!(a3)$, fill=green!8]
+    (rank) {\textbf{Ranker / Validator}};
+
+% Arrows
+\draw[arr] (extract) -- (rag);
+\draw[arr] (rag) -| (a1);
+\draw[arr] (rag) -- (a2);
+\draw[arr] (rag) -- (a3);
+\draw[arr] (rag) -| (a4);
+\draw[arr] (a1) |- (rank);
+\draw[arr] (a2) -- (rank);
+\draw[arr] (a3) -- (rank);
+\draw[arr] (a4) |- (rank);
+\end{tikzpicture}
+}% end resizebox
+\caption{Multi-agent architecture of \tool{}.}
+\label{fig:architecture}
+\end{figure}
+```
+
+#### Template 3: Loop with Feedback (iterative refinement)
+
+For tools with fix-test-retry loops or iterative agents:
+
+```latex
+\begin{figure}[t]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+    node distance=0.6cm,
+    stage/.style={
+        rectangle, rounded corners=3pt, draw=black!70, fill=blue!8,
+        minimum width=4cm, minimum height=0.9cm, align=center,
+        font=\small
+    },
+    decision/.style={
+        diamond, draw=black!70, fill=yellow!10,
+        minimum width=1.5cm, minimum height=1cm, align=center,
+        font=\small, aspect=2
+    },
+    arr/.style={-{Stealth[length=5pt]}, thick, black!60},
+]
+\node[stage] (gen) {\textbf{Generate Fix}};
+\node[stage, below=of gen] (apply) {\textbf{Apply \& Test}};
+\node[decision, below=of apply] (check) {Pass?};
+\node[stage, below=of check] (out) {\textbf{Output Fix}};
+\node[stage, right=1.5cm of check] (classify) {\textbf{Classify Failure}};
+
+\draw[arr] (gen) -- (apply);
+\draw[arr] (apply) -- (check);
+\draw[arr] (check) -- node[left, font=\scriptsize] {yes} (out);
+\draw[arr] (check) -- node[above, font=\scriptsize] {no} (classify);
+\draw[arr] (classify) |- (gen)
+    node[pos=0.75, above, font=\scriptsize] {targeted retry};
+\end{tikzpicture}
+}% end resizebox
+\caption{Iterative fix-test-retry loop with failure classification.}
+\label{fig:retry-loop}
+\end{figure}
+```
+
+#### Design Tips for TikZ Architecture Figures
+
+- **Always wrap in `\resizebox{\linewidth}{!}{...}`** to prevent column overflow
+- Use `fill=blue!8` for regular stages, `fill=green!8` for the core/novel component, `fill=orange!10` for agents
+- Keep labels short — use the prose to explain details
+- Use `dashed` arrows for optional/feedback paths
+- Place the figure at `[t]` (top of column) for consistent placement
+- Font sizes: `\small` for node text, `\scriptsize` for arrow labels
+- The postprocess pipeline will validate these blocks compile correctly (step 9)
 
 ### 3. Component Details (subsequent subsections)
 

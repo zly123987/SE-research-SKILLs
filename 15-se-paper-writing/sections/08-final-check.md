@@ -8,7 +8,7 @@ Run this checklist **after all sections are drafted** and the paper compiles. Th
 
 ### 1.1 Body Page Count
 
-Most top-tier SE venues with double columns allow 10 pages of body content + 1--2 pages of references (often 12 total). References usually do **not** count toward the body limit, but always verify the specific CFP.
+Most top-tier SE venues with double columns allow 10 pages of body content + 1--2 pages of references (often 12 total). References usually do **not** count toward the body limit, but always verify the specific CFP. So the submission version should be exactly at 10 pages for maintext excluding references.
 For single-column journals, limits are usually larger (often 18--20 body pages plus references), but this also varies by venue.
 
 **Check:** Compile the PDF and count body pages (from first page of introduction through end of conclusion, including abstract on page 1). It is mandantory that the body not only must fit within the venue limit, but also should be exactly at the max length. Be very careful of the page limit of the submission version (usually 10) should be respected instead of the final camera-ready (11).
@@ -275,7 +275,40 @@ No section should be a wall of text without visual breaks. Check:
 
 ## 6. Final Compilation Checks
 
-### 6.1 LaTeX Warnings
+### 6.1 Post-Process Pipeline (REQUIRED)
+
+After all sections are drafted and the paper compiles, run the automated post-processing pipeline. This catches and fixes issues that are tedious to find manually:
+
+```bash
+# Basic: BibTeX sanitization, citation normalization, syntax checks
+python scripts/postprocess_paper.py /path/to/paper/dir
+
+# With recompilation after fixes
+python scripts/postprocess_paper.py /path/to/paper/dir --recompile
+
+# Full: + visual overflow check via Claude Vision (uses Agent SDK credentials)
+python scripts/postprocess_paper.py /path/to/paper/dir --visual --recompile
+
+# With TikZ visual validation (step 10)
+python scripts/postprocess_paper.py /path/to/paper/dir --visual-tikz --visual --recompile
+```
+
+The pipeline runs 13 deterministic steps:
+1. **BibTeX sanitization** — fix syntax errors, deduplicate, replace non-ASCII characters
+2. **Citation key normalization** — normalize to alphabetical-only keys across .bib and .tex files
+3. **Dangling citation removal** — remove `\cite{}` keys that have no matching .bib entry
+4. **Nested citation fix** — flatten `\cite{\cite{key},other}` → `\cite{key,other}`
+5. **TikZ validation** — compile-test each TikZ block, strip broken ones, wrap in `\resizebox`
+6. **LaTeX syntax check** — auto-fix common errors (unclosed braces, mismatched environments)
+7. **Finding renumbering** — renumber Finding entries in `\mybox{}` blocks globally
+8. **RQ label enforcement** — ensure `\label{}` tags exist for all RQ sections
+
+Then optionally (with `--visual`):
+9. **Visual overflow check** — sends each PDF page to Claude Vision via the Agent SDK to detect text/table/figure overflow, applies fixes, and recompiles until clean
+
+The visual check inherits Claude SDK credentials from the calling process (no API key configuration needed when running inside Claude Code).
+
+### 6.2 LaTeX Warnings
 
 After compilation, check the `.log` file for:
 
@@ -287,15 +320,22 @@ Citation undefined  → Missing BibTeX entry.
 Float specifier changed → LaTeX moved your figure/table.
 ```
 
-### 6.2 Visual Overflow Check
+### 6.3 Visual Overflow Check (Standalone)
 
-Use the visual overflow checker script ([scripts/check_visual_overflow.py](../scripts/check_visual_overflow.py)) to detect:
-- Tables extending beyond column/page margins
-- Figures cut off or overlapping text
-- Code listings exceeding column width
-- URLs breaking awkwardly
+If you need to run just the visual check without the full pipeline, use the standalone script ([scripts/check_visual_overflow.py](../scripts/check_visual_overflow.py)):
 
-### 6.3 PDF Metadata
+```bash
+# Check only (no fixes)
+python scripts/check_visual_overflow.py /path/to/paper/dir --check-only
+
+# Check and fix (up to 3 iterations)
+python scripts/check_visual_overflow.py /path/to/paper/dir
+
+# Check specific pages
+python scripts/check_visual_overflow.py /path/to/paper/dir --pages 1,3,7-10
+```
+
+### 6.4 PDF Metadata
 
 For double-blind submission (if required by the venue):
 ```bash
@@ -348,5 +388,13 @@ exiftool -all= paper.pdf
 - [ ] Tool name, metric names, baseline names consistent throughout
 - [ ] No LaTeX overfull/underfull warnings in body text
 - [ ] PDF metadata stripped for double-blind
+
+### Post-Process Pipeline
+- [ ] `postprocess_paper.py` run on paper directory (steps 1-13)
+- [ ] BibTeX sanitized (no non-ASCII, no duplicates)
+- [ ] Citation keys normalized (no dangling keys, no nested cites)
+- [ ] LaTeX syntax errors auto-fixed
+- [ ] Paper recompiled after postprocessing
+- [ ] Visual overflow check passed (`--visual` flag, if Claude SDK available)
 
 [← Conclusion](07-conclusion.md) | [Next: Artifact Repository →](09-artifact-repository.md)
