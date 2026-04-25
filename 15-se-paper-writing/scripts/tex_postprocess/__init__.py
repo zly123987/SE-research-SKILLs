@@ -26,6 +26,8 @@ from .normalize_citations import normalize_citations_in_project
 from .fix_findings import renumber_findings_in_directory, renumber_findings_in_file
 from .bib_key_generator import generate_bib_key, normalize_bib_entry
 from .tikz_visual_validator import check_tikz_figures_in_directory
+from .citation_context_checker import check_citation_context_consistency
+from .missing_citation_checker import check_missing_citations
 
 __all__ = [
     "post_process_tex_files",
@@ -40,4 +42,6 @@ __all__ = [
     "generate_bib_key",
     "normalize_bib_entry",
     "check_tikz_figures_in_directory",
+    "check_citation_context_consistency",
+    "check_missing_citations",
 ]

@@ -54,7 +54,8 @@ This skill is organized into modular files for easy reference:
 |--------|------|-------------|
 | **Post-Process Pipeline** | [scripts/postprocess_paper.py](scripts/postprocess_paper.py) | 13-step automated cleanup: BibTeX sanitization, citation normalization, TikZ validation, LaTeX syntax fixing, dangling citation removal. Run after paper is drafted, before final compilation. Use `--visual` to add Claude Vision overflow check. |
 | **Visual Overflow Checker** | [scripts/check_visual_overflow.py](scripts/check_visual_overflow.py) | Post-compilation PDF visual inspection using Claude Vision via Agent SDK. Detects text/table/figure overflow, applies fixes, recompiles until clean. Called automatically by `postprocess_paper.py --visual`. |
-| **Post-Process Module** | [scripts/tex_postprocess/](scripts/tex_postprocess/) | Self-contained Python package (stdlib only, no external deps) implementing all 13 pipeline steps. Bundled locally so the skill works standalone without `research_agency` installed. Key modules: `post_process.py` (orchestrator), `bib_sanitizer.py`, `normalize_citations.py`, `tex_checker.py`, `tikz_visual_validator.py`. |
+| **Citation Consistency Checker** | [scripts/check_citation_consistency.py](scripts/check_citation_consistency.py) | Three-check citation verification: (1) context consistency — author/year mismatch between prose and BibTeX (Step 12b), (2) missing citations — uncited tools, techniques, datasets, metrics (Step 12c), (3) semantic consistency — LLM-based claim-vs-title check (requires Claude SDK). |
+| **Post-Process Module** | [scripts/tex_postprocess/](scripts/tex_postprocess/) | Self-contained Python package (stdlib only, no external deps) implementing all pipeline steps. Bundled locally so the skill works standalone without `research_agency` installed. Key modules: `post_process.py` (orchestrator), `bib_sanitizer.py`, `normalize_citations.py`, `tex_checker.py`, `tikz_visual_validator.py`, `citation_context_checker.py`. |
 
 ---
 
@@ -67,7 +68,7 @@ Use this skill when:
 - **Preparing tool/demo papers** for ICSE/ASE
 - **Formatting** for SE conference submission
 - **Converting** between venues (ICSE → FSE, etc.)
-
+- **Reviewing** SE papers (use checklists to evaluate others' work)
 ---
 
 ## Core SE Paper Types
@@ -110,7 +111,7 @@ The most common SE paper type. Full details in individual section files.
    - Motivating example: concrete case
    - Why existing tools fail
 
-3. Approach / Methodology (2-3 pages)  → sections/03-methodology.md
+3. Approach / Methodology (3-5 pages)  → sections/03-methodology.md
    - Overview/architecture diagram
    - Technical details as flowing prose
    - Algorithm or pseudocode if needed
@@ -120,7 +121,7 @@ The most common SE paper type. Full details in individual section files.
    - Tool name and availability
    - Key implementation choices
 
-5. Evaluation (4-6 pages)              → sections/04-evaluation.md
+5. Evaluation (4-5 pages)              → sections/04-evaluation.md
    - Research questions defined
    - Experimental setup
    - Results per RQ with "Answering RQ" boxes
@@ -131,7 +132,7 @@ The most common SE paper type. Full details in individual section files.
    - Limitations (recommended for prototype papers)
    - Lessons learned (optional, typically for empirical studies)
 
-7. Related Work (1-1.5 pages)          → sections/06-related-work.md
+7. Related Work (0.75-1 page)          → sections/06-related-work.md
 
 8. Conclusion (0.5 page)               → sections/07-conclusion.md
 ```

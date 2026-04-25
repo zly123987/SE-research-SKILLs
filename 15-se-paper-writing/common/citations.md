@@ -9,11 +9,11 @@ Comprehensive citation is expected in SE papers. Reviewers expect thorough liter
 | Section | Expected Citations |
 |---------|-------------------|
 | Introduction | 5-10 |
-| Background | 3-5 |
-| Methodology | 2-5 |
-| Evaluation | 3-5 |
-| Related Work | 15-25 |
-| **Total** | **30-50** |
+| Background | 5-10 |
+| Methodology | 3-7 |
+| Evaluation | 4-8 |
+| Related Work | 20-25 |
+| **Total** | **40-60** |
 
 ---
 

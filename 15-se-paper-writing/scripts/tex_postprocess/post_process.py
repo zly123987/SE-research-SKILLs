@@ -6,6 +6,8 @@ Groups all post-processing steps:
 - Ensuring \label{} tags exist for RQ sections/subsections
 - Normalizing citation keys
 - Fixing nested citation commands (e.g., \cite{\cite{key},other} -> \cite{key,other})
+- AI wording detection and rewriting (em-dashes, leverage, utilize, etc.)
+- Number consistency check (abstract/intro claims vs evaluation data)
 - LaTeX grammar checking and auto-fixing (ALWAYS LAST)
 """
 
@@ -17,6 +19,10 @@ from .tex_checker import check_tex_directory, fix_tex_file
 from .fix_findings import renumber_findings_in_directory
 from .normalize_citations import normalize_citations_in_project
 from .bib_sanitizer import sanitize_bib_file
+from .citation_context_checker import check_citation_context_consistency
+from .missing_citation_checker import check_missing_citations
+from .ai_wording_checker import check_ai_wording_directory, check_ai_wording
+from .number_consistency_checker import check_number_consistency
 
 
 def post_process_tex_files(
@@ -41,6 +47,8 @@ def post_process_tex_files(
     10. Visual validation of TikZ figures via Claude Vision (opt-in)
     11. Wrap TikZ in resizebox
     12. Final citation cross-check (cited keys vs .bib entries)
+    12d. AI wording detection and rewriting (em-dashes, leverage, utilize, etc.)
+    12e. Number consistency check (abstract/intro claims vs evaluation data)
     13. Check and auto-fix LaTeX syntax errors — ALWAYS LAST
     
     Args:
@@ -232,6 +240,78 @@ def post_process_tex_files(
         results['citation_crosscheck'] = crosscheck
     else:
         results['citation_crosscheck'] = {}
+
+    # Step 12b: Citation context consistency (author/year vs bib entries)
+    if bib_path and os.path.isfile(bib_path) and os.path.isdir(tex_dir):
+        if verbose:
+            print(f"\n{'='*60}")
+            print("Step 12b: Checking citation context consistency (author/year)...")
+            print("-" * 60)
+        context_result = check_citation_context_consistency(
+            tex_dir, bib_path,
+            main_tex_path=main_tex_path,
+            verbose=verbose,
+        )
+        results['citation_context_mismatches'] = context_result
+    else:
+        results['citation_context_mismatches'] = {}
+
+    # Step 12c: Missing citation detection (uncited entities)
+    if os.path.isdir(tex_dir):
+        if verbose:
+            print(f"\n{'='*60}")
+            print("Step 12c: Detecting entities missing citations...")
+            print("-" * 60)
+        missing_result = check_missing_citations(
+            tex_dir,
+            main_tex_path=main_tex_path,
+            verbose=verbose,
+        )
+        results['missing_citations'] = missing_result
+    else:
+        results['missing_citations'] = {}
+
+    # Step 12d: AI wording detection and rewriting
+    if verbose:
+        print(f"\n{'='*60}")
+        print("Step 12d: Checking for AI-flavored wording and rewriting...")
+        print("-" * 60)
+
+    results['ai_wording_fixed'] = {}
+    if os.path.isdir(tex_dir):
+        ai_results = check_ai_wording_directory(tex_dir, auto_fix=True, verbose=verbose)
+        results['ai_wording_fixed'] = ai_results
+
+    # Also check main.tex if provided and not in tex_dir
+    if main_tex_path and os.path.isfile(main_tex_path):
+        main_dir = os.path.dirname(main_tex_path)
+        main_name = os.path.basename(main_tex_path)
+        if main_dir != tex_dir or main_name not in results['ai_wording_fixed']:
+            if verbose:
+                print(f"\n  Checking {main_name}...")
+            main_ai = check_ai_wording(main_tex_path, auto_fix=True, verbose=verbose)
+            results['ai_wording_fixed'][main_name] = main_ai
+
+    # Step 12e: Number consistency check (abstract/intro vs evaluation)
+    _main_tex = main_tex_path
+    if not _main_tex and os.path.isdir(tex_dir):
+        candidate = os.path.join(tex_dir, 'main.tex')
+        if os.path.isfile(candidate):
+            _main_tex = candidate
+        else:
+            candidate = os.path.join(tex_dir, 'paper.tex')
+            if os.path.isfile(candidate):
+                _main_tex = candidate
+
+    if _main_tex and os.path.isfile(_main_tex):
+        if verbose:
+            print(f"\n{'='*60}")
+            print("Step 12e: Checking number consistency (abstract/intro vs evaluation)...")
+            print("-" * 60)
+        consistency_result = check_number_consistency(_main_tex, verbose=verbose)
+        results['number_consistency'] = consistency_result
+    else:
+        results['number_consistency'] = {}
 
     # Step 13: Check and auto-fix LaTeX syntax errors (ALWAYS LAST)
     if verbose:

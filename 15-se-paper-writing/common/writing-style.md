@@ -243,6 +243,47 @@ detection to include semantic conflicts."
 
 ---
 
+## Tables and Figures
+
+### Table Width Rules
+
+Tables MUST fit the column width exactly. In double-column format, this is non-negotiable — overfull hbox from tables causes visible margin overflow.
+
+```latex
+% GOOD: Table fits column width
+\begin{table}[t]
+\caption{Detection results across six libraries.}
+\label{tab:results}
+\footnotesize  % Use smaller font if needed to fit
+\begin{tabular}{lrrr}
+\toprule
+Library & Precision & Recall & F1 \\
+\midrule
+...
+\end{tabular}
+\end{table}
+
+% GOOD: Wide table spanning both columns (only when genuinely needed)
+\begin{table*}[t]
+\caption{Per-category results across all baselines.}
+...
+\end{table*}
+
+% BAD: Forcing column-width table with too many columns
+% → Fix: use table* or reduce columns or abbreviate headers
+```
+
+### No Redundant Visualizations
+
+If a table already shows the results, do NOT add a bar chart of the same numbers. Choose the form that best communicates the finding:
+
+- **Table**: when readers need exact numbers (comparisons, replication)
+- **Bar/line chart**: when the finding is about trends, patterns, or relative differences
+- **Heatmap**: when showing coverage or correlation matrices
+- **Diagram**: when showing architecture, workflow, or relationships
+
+**Rule:** One visualization per dataset. Every float must earn its column-inches.
+
 ## Checklist
 
 - [ ] Claims are precise with numbers
@@ -255,5 +296,7 @@ detection to include semantic conflicts."
 - [ ] Non-breaking spaces before citations/refs
 - [ ] Humble tone in comparisons
 - [ ] Limitations acknowledged
+- [ ] All tables fit column width — zero overfull hbox from tables
+- [ ] No redundant table+figure pairs showing the same data
 
 [Back to Main →](../SKILL.md)

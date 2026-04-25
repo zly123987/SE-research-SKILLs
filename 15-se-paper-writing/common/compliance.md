@@ -30,6 +30,8 @@ When a paper directory exists, run these checks **before** any writing proceeds:
 | 5 | Page count | Compiled PDF page count | Within venue page limit |
 | 6 | References | references.bib entry count | 25+ for top-tier venues |
 | 7 | Sections | sections/*.tex file count | 6+ non-empty section files |
+| 8 | Table width | Overfull hbox in .log from tables | Zero overfull hbox from table environments |
+| 9 | Redundant visuals | tab:/fig: label stems | No matching tab: and fig: stems for same data |
 
 **Important**: Only check active (non-commented) LaTeX lines — lines starting with `%` are excluded.
 

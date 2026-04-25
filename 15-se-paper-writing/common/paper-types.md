@@ -26,13 +26,13 @@ The most common SE paper type. Presents a new method/algorithm, implements it as
 ```
 1. Introduction (1.5-2 pages)
 2. Background and Motivation (1-1.5 pages)
-3. Approach / Methodology (2-3 pages)
+3. Approach / Methodology (3-5 pages)
 4. Implementation (0.5-1 page)
-5. Evaluation (4-6 pages)
+5. Evaluation (4-5 pages)
 6. Discussion (0.5-1 page)
    - Threats to validity (required)
    - Limitations (recommended)
-7. Related Work (1-1.5 pages)
+7. Related Work (0.75-1 page)
 8. Conclusion (0.5 page)
 ```
 

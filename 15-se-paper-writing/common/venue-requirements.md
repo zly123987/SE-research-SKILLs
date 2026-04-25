@@ -10,7 +10,7 @@ Page limits, formats, and specific requirements for major SE venues.
 |-------|------|-------|--------|----------------|-----------------|
 | **ICSE 2026** | Technical | 11 | 2-col | IEEEtran | Data availability |
 | **ICSE 2026** | SEIP | 10 | 2-col | IEEEtran | Industry relevance |
-| **FSE 2026** | Research | 11 | 2-col | acmart sigconf | Artifacts encouraged |
+| **FSE 2026** | Research | 18 | 1-col | acmart acmsmall | Artifacts encouraged |
 | **ASE 2026** | Full | 11 | 2-col | IEEEtran | Reproducibility package |
 | **ISSTA 2026** | Full | 11 | 1-col | acmart acmsmall | Test artifact required |
 | **MSR 2026** | Full | 11 | 2-col | IEEEtran | Data track available |
@@ -110,10 +110,10 @@ Your abstract here...
 
 ### FSE
 
-- **Research Track**: 11 pages
+- **Research Track**: 18 pages
 - **Industry Track**: 10 pages
 - **Artifacts strongly encouraged**
-- Format: ACM two-column (sigconf)
+- Format: ACM single-column (acmsmall)
 
 ### ISSTA
 
