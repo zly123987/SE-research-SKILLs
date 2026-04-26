@@ -216,6 +216,168 @@ where $n$ is the number of packages
 \end{equation}
 ```
 
+### Do Not Use `\paragraph{...}` (HARD RULE)
+
+**Do not use the `\paragraph{...}` LaTeX heading anywhere in the body of the paper.** This rule is non-negotiable: every paragraph that uses `\paragraph{...}` opens with the heading itself, and reviewers read that as a sub-thread *within* a thought rather than the start of a new one — a tell of disorganised drafting and a chronic source of "the section is just a list of micro-headings" criticism. Use inline bold lead-ins (`\noindent\textbf{Heading.}`) followed by flowing prose instead, or write the prose without a lead-in label at all.
+
+**Bad** (uses `\paragraph` to chunk content):
+```latex
+\paragraph{Setup.}
+We run the detector on 25 confirmed cases and 25 informative
+secure siblings...
+
+\paragraph{Results.}
+The detector achieves F1 = 0.83 ...
+```
+
+**Good** (inline bold lead-ins, paragraphs flow as normal prose):
+```latex
+\noindent\textbf{Setup.}
+We run the detector on 25 confirmed cases and 25 informative
+secure siblings...
+
+\noindent\textbf{Results.}
+The detector achieves F1 = 0.83 ...
+```
+
+**Better** (no lead-in label at all; the paragraph itself signals the topic):
+```latex
+We evaluate the detector on a curated benchmark of 25 confirmed cases
+and 25 informative secure siblings, and report precision, recall, and
+F1 against six baseline tools. The detector achieves F1 = 0.83 ...
+```
+
+**How to fix violations.** Mechanical: replace every `\paragraph{X}` with `\noindent\textbf{X}` on the same source line; the next source line (without a blank line between) will attach as the same paragraph and render as bold-heading-followed-by-prose. This preserves the existing structure and visual rhythm while satisfying the rule. The deeper fix — collapsing micro-headings into prose — is preferred when the section reads like an itemised list.
+
+This applies to all sections of the paper: methodology, evaluation, discussion, related work, threats to validity. It also applies to `\subparagraph{}`. The only acceptable place for `\paragraph` in a final manuscript is inside a definition/theorem block where some publishers require it — and even there, prefer inline `\textbf{}` if the venue allows.
+
+**Detection script** (run before submission):
+```bash
+grep -n '^\\paragraph{' main.tex && echo "VIOLATION: convert each line above to \\noindent\\textbf{}"
+```
+A clean paper produces no output from this command.
+
+### Use `\noindent\textbf{...}` Lead-Ins Sparingly
+
+Inline bold lead-ins (`\noindent\textbf{Heading.}`) are an acceptable substitute for `\paragraph{...}` headings, but they are not free. A section that opens every paragraph with a bold label still reads as a list of micro-headings — only the typesetting changed. Apply the same restraint as with `\paragraph{...}`: prefer flowing prose where the topic is signalled by the topic sentence itself.
+
+**Heuristic for keeping vs. collapsing:**
+- **Keep** the lead-in only when (a) the paragraph genuinely defines a *named* concept that is referenced elsewhere ("**Internal validity.** ..."), (b) the section is a true enumeration with parallel structure (e.g., **For library maintainers.** / **For ecosystem tooling.** / **For the security research community.**), or (c) the bold label serves as a re-finding handle a reviewer would page-flip back to.
+- **Collapse** otherwise. A "Setup." or "Method." or "Results." label inside an evaluation subsection rarely earns its keep — the topic is obvious from context and a topic sentence does the same work without typographic noise.
+
+**Bad** (every paragraph has a redundant bold lead-in):
+```latex
+\noindent\textbf{Setup.}
+We run the detector on 50 benchmark cases...
+
+\noindent\textbf{Results.}
+The detector achieves F1 = 0.83 ...
+
+\noindent\textbf{Per-domain analysis.}
+The detector performs uniformly across...
+```
+
+**Good** (topic emerges from prose; one lead-in earns its keep as a signpost):
+```latex
+We run the detector on the 50-case benchmark and report
+precision, recall, and F1 against six baselines. The detector
+achieves F1 = 0.83 on confirmed cases (P = 0.87, R = 0.80) and
+performs uniformly across the five composition rules: ...
+
+\noindent\textbf{Ablation.}
+Removing the symbolic leg drops F1 to 0.62; removing the neural
+leg drops it to 0.00 ...
+```
+
+**Pre-submission check:** count `\noindent\textbf{` occurrences. As a soft rule, more than ~10 in a body section, or more than ~25 across the whole paper, suggests the section reads as a list rather than an argument; collapse the weakest ones.
+
+---
+
+## AI-Flavor Reduction (HARD RULE)
+
+LLM-generated prose has a distinctive register that experienced reviewers pattern-match instantly: vague intensifiers, metaphorical verbs used in technical contexts, hedging phrases that add no information, and a rhythm of three-item lists for emphasis. Modern PCs increasingly flag this register and discount the work — even when the underlying research is sound. Aggressively scrub for it before submission.
+
+### The AI-Tell Wordlist
+
+Any one of these in isolation is fine; clusters of them (3+ per paragraph) signal an LLM origin. Replace with concrete, plain alternatives.
+
+**Vague intensifiers / hedges** (delete or replace):
+| AI tell | Why it's wrong | Plain replacement |
+|---------|---------------|-------------------|
+| Notably / Notably, | empty emphasis | delete, or replace with the specific reason |
+| Importantly / Crucially / Remarkably / Significantly (as opener) | author telling reader what to think | delete |
+| It is worth noting that / It should be noted that | filler | delete; just state the fact |
+| Comprehensive / Comprehensively | unfalsifiable claim | "complete," "covers all X," or specify scope |
+| Robust / Robustly | vague | "tolerant of X," "stable under Y," or specify |
+| Sophisticated / Advanced | marketing | name the actual technique |
+| Cutting-edge / State-of-the-art (used loosely) | hype | name the specific baseline beaten |
+| Seamless / Seamlessly | marketing | "without manual intervention" or specify |
+| Holistic | vague | name the components |
+
+**Metaphorical verbs in technical prose** (replace with concrete verbs):
+| AI tell | Plain replacement |
+|---------|-------------------|
+| Leverage | use |
+| Facilitate | allow / enable / cause |
+| Delve into / Dive into | study / examine / analyse |
+| Navigate (a problem) | solve / address / handle |
+| Unlock / Unlocks | enable / makes possible |
+| Showcase | show / demonstrate |
+| Underscore | emphasise / show |
+| Bolster | strengthen |
+| Foster | encourage / produce |
+| Streamline | simplify |
+
+**AI-favourite framings** (rewrite the sentence):
+| AI tell | Why | Fix |
+|---------|-----|-----|
+| In the realm of X / In the world of X | filler | "In X," or delete |
+| The tapestry / landscape / fabric of | metaphor abuse | name the thing |
+| At the heart of / At its core | filler | delete |
+| In recent years (as opener) | generic | name the specific recent thing |
+| In conclusion / To summarize / In summary | unnecessary in research papers (the reader knows it's the conclusion) | delete the phrase, keep the sentence |
+| Fundamentally / Intrinsically | quasi-philosophical | "by construction," "by definition," or delete |
+| The essence of X is | vague | state X directly |
+| Pave the way for | filler | "enable" |
+| A new paradigm / A paradigm shift | overclaim | describe the actual change |
+
+**Sentence-level tells:**
+- **Three-item lists for rhythm**: "fast, accurate, and reliable" — pick the one that's actually new and drop the other two.
+- **Em-dashes used as catch-alls**: AI-text uses em-dashes (—) liberally. In formal academic writing, prefer parentheses, commas, or two clauses joined by "and"/"because"/"so."
+- **Sentences that end with "and beyond" / "and more"**: vague gesture; either name the additional items or stop.
+- **Generic openings** ("This work presents...", "In this paper, we...") — the abstract already said this; jump straight to the substantive claim.
+
+### Formality vs. Casual
+
+Top-tier SE/security venues expect formal register. Common casual constructions to replace:
+
+| Casual | Formal |
+|--------|--------|
+| Let's | "We" or "Consider" |
+| Don't / Won't / Can't (in body prose) | spell out: do not / will not / cannot |
+| A lot of / Lots of | many / numerous / a substantial fraction of |
+| Pretty (much) / Quite | qualify precisely or delete |
+| Stuff / Things | name the actual entities |
+| Get / Got (as main verb) | obtain, receive, become, achieve |
+| Pretty good / Decent | report the metric |
+| Big / Huge | "large" with a number; or "substantial" |
+| Easy / Hard (without measure) | "with low/high overhead," "in O(n^2) time," or specify the difficulty |
+| Real-world (loosely) | "deployed," "production," or name the artefact |
+
+### Detection Heuristics
+
+**Per-paragraph audit:** Count AI-tells (above) per paragraph. More than 2 in one paragraph → rewrite the paragraph.
+
+**Per-paper audit (run before submission):**
+```bash
+# Catch the most common AI tells
+egrep -n '\b(Notably|Importantly|Crucially|Remarkably|Comprehensive|leverage|facilitate|navigate|delve|seamless|robust|holistic|tapestry|realm|underscore|showcase|paradigm|essence)\b' main.tex \
+  | grep -v '%' | head -50
+```
+Each hit deserves a manual review; most should be replaced.
+
+**Re-read test:** After a rewrite pass, read three paragraphs aloud. If they sound like a marketing brochure or a TED talk, they still have AI flavour. Aim for the register of a focused research engineer explaining a result to a senior colleague: short sentences, specific claims, no flourishes.
+
 ---
 
 ## Tone Guidelines
