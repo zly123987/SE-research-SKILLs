@@ -1,26 +1,32 @@
 ---
 name: paper-rebuttal
 description: Use when drafting, shortening, or revising academic paper rebuttals to reviewers, especially for conference/journal reviews with tight word limits, mixed praise/concerns, methodology challenges, novelty disputes, or requests for clearer positioning.
+version: 1.0.0
+author: SE Research Skills
+license: MIT
+tags: [Rebuttal, Paper Writing, Academic Writing]
 ---
 
 # Paper Rebuttal
 
 Use this skill for academic review responses and rebuttal files such as `rebuttal.md`.
 
+> **Integrity note.** This skill helps a human author structure their own rebuttal; it does not replace substantive engagement with reviewer concerns. Do not concede points the authors do not actually concede, and do not promise experiments the authors have not run. Before sharing reviewer text with any LLM, check the venue's confidentiality policy (some conferences explicitly prohibit pasting reviews into third-party services).
+
 ## Goal
 
 Write responses that are:
 
 - short,
-- directly responsive to the reviewer’s actual question,
+- directly responsive to the reviewer's actual question,
 - careful about claims,
 - and aligned with the evidence already available in the paper, artifact, or local files.
 
 ## Workflow
 
-1. Identify the reviewer’s real concern.
+1. Identify the reviewer's real concern.
    Common categories:
-   - novelty or “not surprising”
+   - novelty or "not surprising"
    - unclear definition or measurement
    - missing related work
    - sampling or scope justification
@@ -99,9 +105,9 @@ Good heading examples:
   - what the metric measures,
   - what it does not measure,
   - and what limitation follows from that.
-- Prefer “dataset-specific” over “generalizable” unless strong support exists.
-- Prefer “conservative lower bound” over overclaiming completeness.
-- For artifact/anonymity issues, avoid absolute claims like “anonymity is assured.”
+- Prefer "dataset-specific" over "generalizable" unless strong support exists.
+- Prefer "conservative lower bound" over overclaiming completeness.
+- For artifact/anonymity issues, avoid absolute claims like "anonymity is assured."
 - For practitioner-evaluation concerns, do not argue that the authors count as practitioners; distinguish precision validation from practitioner validation.
 
 ## Useful Response Patterns
@@ -116,7 +122,7 @@ Good heading examples:
   - or operationalization.
 
 Good move:
-- “We agree that this is not new as general OSS advice; our contribution is to quantify/operationalize it in the fork-synchronization setting.”
+- "We agree that this is not new as general OSS advice; our contribution is to quantify/operationalize it in the fork-synchronization setting."
 
 ### When the reviewer says two findings overlap
 
@@ -165,7 +171,7 @@ When patching a rebuttal file:
 - preserve reviewer grouping,
 - keep one response per issue,
 - shorten conservatively,
-- and check for mismatches between the reviewer’s actual question and the drafted answer.
+- and check for mismatches between the reviewer's actual question and the drafted answer.
 
 Prioritize these failure modes:
 

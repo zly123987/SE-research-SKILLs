@@ -1,29 +1,28 @@
 # Software Engineering Research `Skills` Library
 
-> **The most comprehensive open-source library of SE research engineering skills for AI agents**
+> An open-source library of skills for AI agents conducting software-engineering research.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-<div align="center">
+<sub>📚 This library is collected and organised **solely for academic use** with full commitment to research integrity and responsible scholarship. It is shared **for scholarly exchange and learning purposes only** (仅供学术交流学习使用), and must not be used to fabricate results, plagiarise, circumvent peer review, evade detection, or otherwise undermine the integrity of software-engineering research or any other field. By using these skills you agree to apply them ethically and to take full responsibility for any output they produce.</sub>
 
-### **Skills Powering SE Research in 2026**
+## Scope
 
-</div>
+The library is organised into numbered categories spanning the SE research lifecycle. **Currently 7 of 15 planned categories have published content**; the remainder are placeholders being populated incrementally.
 
 <details>
-<summary><b>View All 15 Categories</b></summary>
-
-<div align="center">
+<summary><b>15 Planned Categories (7 currently published)</b></summary>
 
 | | | |
 |:---:|:---:|:---:|
-| **Program Analysis** | **Software Testing** | **Code Generation** |
-| **Bug Detection & Repair** | **Mining Software Repos** | **Software Security** |
-| **Dependency Management** | **Code Review & Quality** | **DevOps & CI/CD** |
-| **Empirical SE** | **Requirements Engineering** | **Software Architecture** |
-| **Human Aspects of SE** | **AI/ML for SE** | **SE Paper Writing** |
+| **01 Program Analysis** ✅ | **02 Agent Construction** ✅ | 03 Code Generation 🚧 |
+| **04 Bug Detection & Repair** ✅ | 05 Mining Software Repos 🚧 | 06 Software Security 🚧 |
+| 07 Dependency Management 🚧 | 08 Code Review & Quality 🚧 | 09 DevOps & CI/CD 🚧 |
+| 10 Empirical SE 🚧 | **11 Experiment Design** ✅ | 12 Software Architecture 🚧 |
+| 13 Human Aspects of SE 🚧 | 14 AI/ML for SE 🚧 | **15 SE Paper Writing** ✅ |
+| **16 Rebuttal** ✅ | **17 Revision** ✅ | |
 
-</div>
+✅ published — 🚧 in progress
 
 </details>
 
@@ -85,178 +84,120 @@ These skills are designed to support research targeting top-tier SE venues:
 
 Tools for static and dynamic analysis of programs.
 
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[tree-sitter](01-program-analysis/tree-sitter/)** | Fast incremental parsing for 100+ languages, AST manipulation, syntax highlighting | 450+ |
-| **[CodeQL](01-program-analysis/codeql/)** | GitHub's semantic code analysis, query language for finding vulnerabilities | 400+ |
-| **[Joern](01-program-analysis/joern/)** | Code property graph analysis, inter-procedural data flow | 350+ |
-| **[WALA](01-program-analysis/wala/)** | IBM's static analysis for Java/JavaScript, call graph construction | 300+ |
-| **[Soot](01-program-analysis/soot/)** | Java optimization framework, Jimple IR, points-to analysis | 350+ |
+| Skill | Description |
+|-------|-------------|
+| **[tree-sitter](01-program-analysis/tree-sitter/)** | Incremental parsing for many languages, AST manipulation, syntax highlighting |
 
-### 02 - Software Testing
+*Planned:* CodeQL, Joern, WALA, Soot.
 
-Frameworks for test generation, fuzzing, and mutation testing.
+### 02 - Agent Construction
 
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[AFL++](02-software-testing/aflpp/)** | State-of-the-art fuzzer, coverage-guided, QEMU mode | 400+ |
-| **[LibFuzzer](02-software-testing/libfuzzer/)** | In-process fuzzing, LLVM-based, corpus management | 300+ |
-| **[pytest](02-software-testing/pytest/)** | Python testing framework, fixtures, parametrization | 350+ |
-| **[mutation-testing](02-software-testing/mutation-testing/)** | PIT, mutmut, mutation score analysis | 300+ |
-| **[EvoSuite](02-software-testing/evosuite/)** | Automated test generation for Java, search-based | 350+ |
+Foundations for building LLM-driven agents that can carry out SE research tasks.
+
+| Skill | Description |
+|-------|-------------|
+| **[react-langgraph](02-agent-construction/react-langgraph/)** | Building ReAct-style agents with LangGraph, including tool use, state machines, and evaluation |
 
 ### 03 - Code Generation
 
-LLM-based code synthesis and evaluation.
-
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[CodeLlama](03-code-generation/codellama/)** | Meta's code LLM, infilling, instruction-tuned variants | 400+ |
-| **[StarCoder](03-code-generation/starcoder/)** | BigCode's open code LLM, 15B params, multi-language | 350+ |
-| **[code-evaluation](03-code-generation/code-evaluation/)** | HumanEval, MBPP, pass@k metrics, execution-based eval | 400+ |
-| **[copilot-evaluation](03-code-generation/copilot-evaluation/)** | Evaluating AI code assistants, productivity metrics | 300+ |
+> 🚧 **We are updating this category.** No skills are published here yet. For now, please refer to the existing modules listed above (especially **[01 - Program Analysis](#01---program-analysis)** for code-AST work and **[02 - Agent Construction](#02---software-testing)** for LLM-agent foundations).
 
 ### 04 - Bug Detection & Repair
 
 Automated program repair and bug localization.
 
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[Defects4J](04-bug-detection-repair/defects4j/)** | Java bug benchmark, 800+ real bugs, test suites | 400+ |
-| **[BugsInPy](04-bug-detection-repair/bugsinpy/)** | Python bug benchmark, 500+ bugs, pytest integration | 300+ |
-| **[GumTree](04-bug-detection-repair/gumtree/)** | AST differencing, edit scripts, code change analysis | 350+ |
-| **[repair-llm](04-bug-detection-repair/repair-llm/)** | LLM-based program repair, few-shot, chain-of-thought | 400+ |
+| Skill | Description |
+|-------|-------------|
+| **[Defects4J](04-bug-detection-repair/defects4j/)** | Java bug benchmark, real bugs with test suites |
+
+*Planned:* BugsInPy, GumTree, repair-llm.
 
 ### 05 - Mining Software Repositories
 
-Tools for large-scale repository analysis.
-
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[PyGithub](05-mining-software-repos/pygithub/)** | GitHub API wrapper, repository mining, rate limiting | 350+ |
-| **[GHTorrent](05-mining-software-repos/ghtorrent/)** | GitHub event archive, MongoDB/MySQL, historical data | 300+ |
-| **[SourcererCC](05-mining-software-repos/sourcerercc/)** | Large-scale clone detection, token-based, scalable | 350+ |
-| **[RepoReapers](05-mining-software-repos/reporeapers/)** | Repository quality scoring, filtering engineered projects | 250+ |
+> 🚧 **We are updating this category.** No skills are published here yet. For now, please refer to **[11 - Experiment Design](#11---requirements-engineering)** for general empirical-study workflow and **[04 - Bug Detection & Repair](#04---bug-detection--repair)** for existing benchmark coverage.
 
 ### 06 - Software Security
 
-Vulnerability detection and security analysis.
-
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[Semgrep](06-software-security/semgrep/)** | Lightweight static analysis, custom rules, CI integration | 400+ |
-| **[Snyk](06-software-security/snyk/)** | Dependency vulnerability scanning, fix suggestions | 300+ |
-| **[CVEfixes](06-software-security/cvefixes/)** | Vulnerability dataset, 5K+ CVEs, fix commits | 300+ |
-| **[CodeBERT-vuln](06-software-security/codebert-vuln/)** | Neural vulnerability detection, fine-tuning | 350+ |
+> 🚧 **We are updating this category.** No skills are published here yet. For now, please refer to **[01 - Program Analysis](#01---program-analysis)** for the analysis substrate most security tools build on.
 
 ### 07 - Dependency Management
 
-Package managers and dependency resolution.
-
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[pip-resolver](07-dependency-management/pip-resolver/)** | Python dependency resolution, version conflicts | 400+ |
-| **[npm-analysis](07-dependency-management/npm-analysis/)** | npm ecosystem analysis, dependency graphs | 300+ |
-| **[cargo-deps](07-dependency-management/cargo-deps/)** | Rust dependency analysis, feature flags | 300+ |
-| **[dependency-graphs](07-dependency-management/dependency-graphs/)** | Cross-ecosystem dependency visualization | 350+ |
+> 🚧 **We are updating this category.** No skills are published here yet. For now, please refer to the existing modules listed above.
 
 ### 08 - Code Review & Quality
 
-Code quality analysis and review automation.
-
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[SonarQube](08-code-review-quality/sonarqube/)** | Code quality platform, rules, quality gates | 400+ |
-| **[code-smells](08-code-review-quality/code-smells/)** | Detection tools, refactoring suggestions | 350+ |
-| **[review-automation](08-code-review-quality/review-automation/)** | Automated code review, bot integration | 300+ |
+> 🚧 **We are updating this category.** No skills are published here yet. For now, please refer to the existing modules listed above.
 
 ### 09 - DevOps & CI/CD
 
-Build systems and deployment pipelines.
-
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[github-actions](09-devops-cicd/github-actions/)** | CI/CD workflows, matrix builds, artifacts | 400+ |
-| **[docker-research](09-devops-cicd/docker-research/)** | Container analysis, Dockerfile mining | 300+ |
-| **[build-systems](09-devops-cicd/build-systems/)** | Make, CMake, Gradle analysis | 350+ |
+> 🚧 **We are updating this category.** No skills are published here yet. For now, please refer to the existing modules listed above.
 
 ### 10 - Empirical SE
 
-Methods for empirical software engineering research.
+> 🚧 **We are updating this category.** No skills are published here yet. For now, please refer to **[11 - Experiment Design](#11---requirements-engineering)** for the closely-related experiment-workflow skill.
 
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[statistical-analysis](10-empirical-se/statistical-analysis/)** | Effect sizes, significance tests, Cliff's delta | 400+ |
-| **[survey-design](10-empirical-se/survey-design/)** | Developer surveys, sampling, validity threats | 350+ |
-| **[replication-studies](10-empirical-se/replication-studies/)** | Replication packages, artifact evaluation | 300+ |
-| **[qualitative-methods](10-empirical-se/qualitative-methods/)** | Coding, grounded theory, thematic analysis | 300+ |
+### 11 - Experiment Design
 
-### 11 - Requirements Engineering
+Workflow templates for designing and running SE experiments.
 
-Requirements analysis and traceability.
-
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[nlp-requirements](11-requirements-engineering/nlp-requirements/)** | NLP for requirements, ambiguity detection | 350+ |
-| **[traceability](11-requirements-engineering/traceability/)** | Requirements-to-code tracing, link recovery | 300+ |
+| Skill | Description |
+|-------|-------------|
+| **[experiment-workflow](11-experiment-design/experiment-workflow/)** | Designing controlled experiments, sampling, RQ formulation, validity threats |
 
 ### 12 - Software Architecture
 
-Design patterns and architectural analysis.
-
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[architecture-recovery](12-software-architecture/architecture-recovery/)** | Architecture extraction from code | 350+ |
-| **[microservices-analysis](12-software-architecture/microservices-analysis/)** | Service decomposition, API analysis | 300+ |
-| **[design-patterns](12-software-architecture/design-patterns/)** | Pattern detection, anti-patterns | 300+ |
+> 🚧 **We are updating this category.** No skills are published here yet. For now, please refer to the existing modules listed above.
 
 ### 13 - Human Aspects of SE
 
-Developer productivity and code comprehension.
-
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[developer-productivity](13-human-aspects-se/developer-productivity/)** | SPACE framework, metrics, studies | 350+ |
-| **[code-comprehension](13-human-aspects-se/code-comprehension/)** | Eye-tracking, cognitive load, studies | 300+ |
+> 🚧 **We are updating this category.** No skills are published here yet. For now, please refer to the existing modules listed above.
 
 ### 14 - AI/ML for SE
 
-Machine learning techniques for SE tasks.
-
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[CodeBERT](14-ai-ml-for-se/codebert/)** | Pre-trained model for code, clone detection, search | 400+ |
-| **[GraphCodeBERT](14-ai-ml-for-se/graphcodebert/)** | Data flow-aware code model | 350+ |
-| **[code-embeddings](14-ai-ml-for-se/code-embeddings/)** | Code2vec, doc2vec, semantic similarity | 350+ |
-| **[llm4code-eval](14-ai-ml-for-se/llm4code-eval/)** | Evaluating LLMs on SE tasks, benchmarks | 400+ |
+> 🚧 **We are updating this category.** No skills are published here yet. For now, please refer to **[02 - Agent Construction](#02---software-testing)** for LLM-agent foundations.
 
 ### 15 - SE Paper Writing
 
 Writing for top-tier SE venues.
 
-| Skill | Description | Lines |
-|-------|-------------|-------|
-| **[se-paper-writing](15-se-paper-writing/)** | ICSE, FSE, ASE paper writing, LaTeX templates, reviewing | 600+ |
+| Skill | Description |
+|-------|-------------|
+| **[se-paper-writing](15-se-paper-writing/)** | ICSE, FSE, ASE paper writing — modular section guides, LaTeX templates, reviewer checklists |
+
+### 16 - Rebuttal
+
+Writing one-shot rebuttals to first-round reviews under tight word limits.
+
+| Skill | Description |
+|-------|-------------|
+| **[paper-rebuttal](16-rebuttal/SKILL.md)** | Concise direct responses to reviewer concerns, posture selection, compression tactics |
+
+### 17 - Revision
+
+Handling full major-revision cycles (revised PDF + response doc + new experiments + artifact update).
+
+| Skill | Description |
+|-------|-------------|
+| **[handling-major-revision](17-revision/SKILL.md)** | Response-doc structure, paper-edit discipline, diff-PDF generation, empirical follow-up patterns |
 
 ---
 
 ## Skill Structure
 
-Each skill follows a battle-tested format for maximum usefulness:
+Each skill follows a consistent format:
 
 ```
 skill-name/
-├── SKILL.md                    # Quick reference (200-500 lines)
+├── SKILL.md                    # Quick reference (target ~200-500 lines)
 │   ├── Metadata (name, description, version)
 │   ├── When to use this skill
 │   ├── Quick patterns & examples
 │   └── Links to references
 │
-├── references/                 # Deep documentation (300KB+)
-│   ├── README.md              # From GitHub/official docs
+├── references/                 # Deep documentation (optional, target where useful)
+│   ├── README.md
 │   ├── api.md                 # API reference
 │   ├── tutorials.md           # Step-by-step guides
-│   ├── issues.md              # Real GitHub issues & solutions
 │   └── releases.md            # Version history
 │
 ├── scripts/                    # Helper scripts (optional)
@@ -264,24 +205,23 @@ skill-name/
 ```
 
 <details>
-<summary><b>Quality Standards</b></summary>
+<summary><b>Quality Targets</b></summary>
 
-- 300KB+ documentation from official sources
-- Real GitHub issues & solutions (when available)
-- Code examples with language detection
-- Version history & breaking changes
-- Links to official docs
+- SKILL.md focused (~200–500 lines), with the deeper material in linked reference files where useful
+- Reference material drawn from official sources where useful
+- Code examples with language tags
+- Links to upstream docs for tools/datasets discussed
 
 </details>
 
 ## Roadmap
 
-We're building towards 60+ comprehensive skills across the full SE research lifecycle.
+The roadmap covers additional skills across the SE research lifecycle; coverage will grow incrementally.
 
 ### Phase 1 (Current): Core Analysis Tools
-- [x] Program analysis (tree-sitter, CodeQL, Joern)
-- [x] Software testing (AFL++, EvoSuite, mutation testing)
-- [x] Bug detection (Defects4J, BugsInPy, GumTree)
+- [x] Program analysis (tree-sitter); CodeQL, Joern planned
+- [x] Bug detection (Defects4J); BugsInPy, GumTree planned
+- [ ] Software testing (AFL++, EvoSuite, mutation testing)
 
 ### Phase 2: AI/ML for SE
 - [ ] Code models (CodeBERT, GraphCodeBERT, UniXcoder)
@@ -305,46 +245,46 @@ SE-research-SKILLs/
 ├── README.md                    ← You are here
 ├── CLAUDE.md                    ← Claude Code guidance
 ├── CONTRIBUTING.md              ← Contribution guide
-├── docs/                        ← Additional documentation
-├── demos/                       ← Demo gallery
-├── 01-program-analysis/         (5 skills planned)
-├── 02-software-testing/         (5 skills planned)
-├── 03-code-generation/          (4 skills planned)
-├── 04-bug-detection-repair/     (4 skills planned)
-├── 05-mining-software-repos/    (4 skills planned)
-├── 06-software-security/        (4 skills planned)
-├── 07-dependency-management/    (4 skills planned)
-├── 08-code-review-quality/      (3 skills planned)
-├── 09-devops-cicd/              (3 skills planned)
-├── 10-empirical-se/             (4 skills planned)
-├── 11-requirements-engineering/ (2 skills planned)
-├── 12-software-architecture/    (3 skills planned)
-├── 13-human-aspects-se/         (2 skills planned)
-├── 14-ai-ml-for-se/             (4 skills planned)
-└── 15-se-paper-writing/         (1 skill - comprehensive)
+├── 01-program-analysis/         ✅ published (tree-sitter)
+├── 02-agent-construction/       ✅ published (react-langgraph)
+├── 03-code-generation/          🚧 planned
+├── 04-bug-detection-repair/     ✅ published (defects4j)
+├── 05-mining-software-repos/    🚧 planned
+├── 06-software-security/        🚧 planned
+├── 07-dependency-management/    🚧 planned
+├── 08-code-review-quality/      🚧 planned
+├── 09-devops-cicd/              🚧 planned
+├── 10-empirical-se/             🚧 planned
+├── 11-experiment-design/        ✅ published (experiment-workflow)
+├── 12-software-architecture/    🚧 planned
+├── 13-human-aspects-se/         🚧 planned
+├── 14-ai-ml-for-se/             🚧 planned
+├── 15-se-paper-writing/         ✅ published
+├── 16-rebuttal/                 ✅ published
+└── 17-revision/                 ✅ published
 ```
 
 ## Use Cases
 
 ### For SE Researchers
-"I need to evaluate my bug detection tool on standard benchmarks"
-→ **04-bug-detection-repair/defects4j/** - 800+ real Java bugs with test suites
+"I need to evaluate my bug detection technique on standard benchmarks"
+→ **[04-bug-detection-repair/defects4j/](04-bug-detection-repair/defects4j/)** — Java bug benchmark with test suites
 
 ### For PhD Students
 "How do I write a paper for ICSE?"
-→ **15-se-paper-writing/** - Templates, examples, reviewing criteria
+→ **[15-se-paper-writing/](15-se-paper-writing/)** — Section-by-section guides, templates, reviewer criteria
 
 ### For Tool Builders
-"I want to build a static analyzer"
-→ **01-program-analysis/tree-sitter/** - Fast parsing for 100+ languages
+"I want to parse code in many languages"
+→ **[01-program-analysis/tree-sitter/](01-program-analysis/tree-sitter/)** — Incremental parsing across languages
 
 ### For Empirical Researchers
-"How do I analyze my experiment results?"
-→ **10-empirical-se/statistical-analysis/** - Effect sizes, significance tests
+"How do I design a controlled SE experiment?"
+→ **[11-experiment-design/experiment-workflow/](11-experiment-design/experiment-workflow/)** — RQ formulation, sampling, validity threats
 
-### For Security Researchers
-"I need to detect vulnerabilities in code"
-→ **06-software-security/semgrep/** - Custom rules, CI integration
+### For Agent Developers
+"How do I build an LLM agent that uses tools?"
+→ **[02-agent-construction/react-langgraph/](02-agent-construction/react-langgraph/)** — ReAct pattern, LangGraph state machines
 
 ## Key Datasets for SE Research
 
@@ -358,6 +298,16 @@ SE-research-SKILLs/
 | **CVEfixes** | Vulnerabilities | 5K+ CVEs | [link](https://github.com/secureIT-project/CVEfixes) |
 | **CoCoMIC** | Commits | 32K repos | [link](https://github.com/LoyolaAI/CoCoMIC) |
 
+> **Dataset usage note:** Check each dataset's licence and opt-out policy before use. Some datasets (e.g., The Stack) require honouring author opt-outs and may have specific terms for commercial vs research use. The links above are for reference only; this library does not redistribute any dataset.
+
+## Disclaimer
+
+These skills produce code, analyses, experimental results, drafted manuscripts, automated rebuttals, generated patches, security findings, and other artefacts intended to support software-engineering research. The library and its authors make **no warranty** of correctness, completeness, fitness for purpose, or compliance with any policy, contract, licence, ethical guideline, or venue rule.
+
+**Users assume all risk for the use of any artefact produced by these skills.** Before relying on an output for any consequential decision — publication, peer review, deployment, citation, security claim, code merge, commercial use, or downstream research — the user is responsible for **independently verifying** that the output is correct, original, properly attributed, and appropriate for its intended purpose. Generated content should be treated as a draft that requires human review, not as a finished result.
+
+By using these skills you acknowledge and accept this risk.
+
 ## License
 
 MIT License - See [LICENSE](LICENSE) for details.
@@ -366,15 +316,12 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 ## Acknowledgments
 
-Built with inspiration from:
-- [AI-research-SKILLs](https://github.com/zechenzhangAGI/AI-research-SKILLs) by Orchestra Research
-- The Software Engineering research community
-- Open source SE tools maintainers
+Repository structure was inspired by the public [AI-research-SKILLs](https://github.com/zechenzhangAGI/AI-research-SKILLs) project (MIT-licensed); no code was copied. Thanks also to the broader software-engineering research community and the maintainers of the open-source tools this library refers to.
 
 ## Contributing
 
-We welcome contributions from the SE research community! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions from the SE research community are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
-*Maintained for the SE research community. Star if you find it useful!*
+*Maintained for the SE research community.*

@@ -2,33 +2,38 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Use & Integrity Notice
+
+This library is collected and organised **solely for academic use** with full commitment to research integrity and responsible scholarship. It is shared **for scholarly exchange and learning purposes only** (仅供学术交流学习使用), and must not be used to fabricate results, plagiarise, circumvent peer review, evade detection, or otherwise undermine the integrity of SE (or any other) research. Outputs produced by these skills are drafts that require human review; **the user assumes all risk** for downstream use (publication, deployment, citation, security claims, commercial decisions). Treat this notice as a hard constraint when answering questions or generating content from this repo.
+
 ## Project Overview
 
-**Software Engineering Research Skills Library** - A comprehensive open-source library of SE research skills designed to enable AI agents to autonomously conduct software engineering research experiments. Each skill provides expert-level guidance (200-600 lines) with real code examples, troubleshooting guides, and production-ready workflows.
+**Software Engineering Research Skills Library** — An open-source library of SE research skills intended to support AI coding agents helping human researchers run software-engineering experiments under **human-in-the-loop supervision**. Each skill aims to provide focused guidance (target ~200–500 lines) with examples and references to upstream documentation where useful.
 
-**Mission**: Enable AI agents to autonomously conduct SE research from hypothesis to experimental verification, covering program analysis, software testing, bug detection, code generation, and empirical studies for top-tier SE venues (ICSE, FSE, ASE, ISSTA, MSR, EMSE).
+**Mission**: Help AI coding agents assist human researchers across the SE research lifecycle, currently covering program analysis, bug-benchmark evaluation, agent construction, experiment design, and paper writing/rebuttal/revision workflows. Additional areas are planned. Outputs are drafts that require author judgement; the agent's role is to accelerate the mechanical and lookup-heavy parts of the work, not to replace the researcher's reasoning.
 
 ## Repository Architecture
 
-### Directory Structure (Skills Across 15 Categories)
+### Directory Structure (numbered categories)
 
-Skills are organized into numbered categories representing the SE research lifecycle:
+Skills are organised into numbered categories representing the SE research lifecycle. **Only a subset are currently published**; the rest are placeholders being populated incrementally — when answering questions, prefer pointing the user to existing skills over claiming an unpublished one exists.
 
-- `01-program-analysis/` - Static/dynamic analysis (tree-sitter, CodeQL, Joern, WALA, Soot)
-- `02-software-testing/` - Testing frameworks (AFL++, LibFuzzer, pytest, mutation testing)
-- `03-code-generation/` - Code synthesis (CodeLlama, StarCoder, Copilot evaluation)
-- `04-bug-detection-repair/` - APR tools (GumTree, Defects4J, RepairLLM)
-- `05-mining-software-repos/` - MSR tools (PyGithub, GHTorrent, SourcererCC)
-- `06-software-security/` - Security analysis (Semgrep, Snyk, SAST/DAST tools)
-- `07-dependency-management/` - Package managers (pip, npm, cargo, dependency resolution)
-- `08-code-review-quality/` - Code quality (SonarQube, code smell detection, review automation)
-- `09-devops-cicd/` - Build systems (GitHub Actions, Docker, Kubernetes)
-- `10-empirical-se/` - Empirical methods (survey design, statistical analysis, replication)
-- `11-requirements-engineering/` - Requirements (traceability, NLP for requirements)
-- `12-software-architecture/` - Architecture (design patterns, microservices, dependency analysis)
-- `13-human-aspects-se/` - Human factors (developer productivity, code comprehension)
-- `14-ai-ml-for-se/` - AI4SE tools (CodeBERT, GraphCodeBERT, LLM4Code evaluation)
-- `15-se-paper-writing/` - Paper writing for ICSE, FSE, ASE, ISSTA, MSR
+**Currently published (verified on disk):**
+
+| Category | Published skill(s) |
+|---|---|
+| `01-program-analysis/` | `tree-sitter/` |
+| `02-agent-construction/` | `react-langgraph/` *(directory name is `agent-construction`, not `software-testing` as earlier README drafts implied)* |
+| `04-bug-detection-repair/` | `defects4j/` |
+| `11-experiment-design/` | `experiment-workflow/` *(directory name is `experiment-design`, not `requirements-engineering`)* |
+| `15-se-paper-writing/` | top-level `SKILL.md` + `templates/`, `sections/`, `checklists/` |
+| `16-rebuttal/` | `SKILL.md` (one-shot rebuttal to first-round reviews) |
+| `17-revision/` | `SKILL.md` + `templates/major_response_template.tex` (full major-revision cycle) |
+
+**Planned but not yet on disk** (treat as "🚧 in progress" — do not fabricate paths):
+`03-code-generation/`, `05-mining-software-repos/`, `06-software-security/`, `07-dependency-management/`, `08-code-review-quality/`, `09-devops-cicd/`, `10-empirical-se/`, `12-software-architecture/`, `13-human-aspects-se/`, `14-ai-ml-for-se/`.
+
+When the user asks about a topic that maps to an unpublished category, name the closest published skill instead of inventing a path. For example, "MSR" → point to `11-experiment-design/experiment-workflow/`; "code-LLM evaluation" → `02-agent-construction/react-langgraph/` for agent foundations; "vulnerability detection" → `01-program-analysis/tree-sitter/` for the analysis substrate.
 
 ### Skill File Structure
 
@@ -209,11 +214,11 @@ SKILL.md should link directly to reference files (one level deep):
 
 ## Philosophy
 
-**Quality over Quantity**: This library maintains high standards by:
-- Requiring 200-500 line SKILL.md files (focused, actionable guidance)
-- Including 300KB+ documentation from official sources
-- Providing real GitHub issues with solutions
-- Following Anthropic's official best practices for skills
-- Testing skills with real use cases before inclusion
+**Quality over Quantity** — the library aims for the following targets, recognising that not every published skill yet meets each one:
 
-Each skill represents expert-level knowledge distilled into a format optimized for AI agent consumption, specifically targeting SE research workflows.
+- Focused SKILL.md files (target ~200–500 lines); split long content into linked reference files
+- Reference material from official sources where useful (size varies by skill)
+- Following Anthropic's published best practices for skills where applicable
+- Validating each skill on at least one real use case before merging
+
+Each skill aims to distil practical guidance for SE research workflows into a format usable by AI coding agents. Outputs are drafts that require human review; treat the library as a workflow accelerator, not a substitute for researcher judgement.

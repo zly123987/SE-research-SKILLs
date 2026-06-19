@@ -10,7 +10,7 @@ dependencies: [texlive-full, bibtex]
 
 # SE Paper Writing for Top-Tier Venues
 
-Expert-level guidance for writing publication-ready papers targeting **ICSE, FSE/ESEC, ASE, ISSTA, MSR, TSE, TOSEM, and EMSE**. This skill combines SE research writing conventions with practical tools: LaTeX templates, evaluation checklists, and venue-specific requirements.
+Guidance for writing papers targeting **ICSE, FSE/ESEC, ASE, ISSTA, MSR, TSE, TOSEM, and EMSE**. This skill combines SE research writing conventions with practical tools: LaTeX templates, evaluation checklists, and venue-specific requirements. Treat the output as drafts that require author review — see the repository's [integrity notice](../CLAUDE.md#use--integrity-notice).
 
 ## Quick Navigation
 
@@ -53,9 +53,9 @@ This skill is organized into modular files for easy reference:
 | Script | File | Description |
 |--------|------|-------------|
 | **Post-Process Pipeline** | [scripts/postprocess_paper.py](scripts/postprocess_paper.py) | 13-step automated cleanup: BibTeX sanitization, citation normalization, TikZ validation, LaTeX syntax fixing, dangling citation removal. Run after paper is drafted, before final compilation. Use `--visual` to add Claude Vision overflow check. |
-| **Visual Overflow Checker** | [scripts/check_visual_overflow.py](scripts/check_visual_overflow.py) | Post-compilation PDF visual inspection using Claude Vision via Agent SDK. Detects text/table/figure overflow, applies fixes, recompiles until clean. Called automatically by `postprocess_paper.py --visual`. |
-| **Citation Consistency Checker** | [scripts/check_citation_consistency.py](scripts/check_citation_consistency.py) | Three-check citation verification: (1) context consistency — author/year mismatch between prose and BibTeX (Step 12b), (2) missing citations — uncited tools, techniques, datasets, metrics (Step 12c), (3) semantic consistency — LLM-based claim-vs-title check (requires Claude SDK). |
-| **Post-Process Module** | [scripts/tex_postprocess/](scripts/tex_postprocess/) | Self-contained Python package (stdlib only, no external deps) implementing all pipeline steps. Bundled locally so the skill works standalone without `research_agency` installed. Key modules: `post_process.py` (orchestrator), `bib_sanitizer.py`, `normalize_citations.py`, `tex_checker.py`, `tikz_visual_validator.py`, `citation_context_checker.py`. |
+| **Visual Overflow Checker** | [scripts/check_visual_overflow.py](scripts/check_visual_overflow.py) | Post-compilation PDF visual inspection using a multimodal LLM (e.g., Anthropic's Claude via the Claude Agent SDK). Detects text/table/figure overflow, applies fixes, recompiles until clean. Called automatically by `postprocess_paper.py --visual`. Optional integration; subject to the provider's own terms and costs. |
+| **Citation Consistency Checker** | [scripts/check_citation_consistency.py](scripts/check_citation_consistency.py) | Three-check citation verification: (1) context consistency — author/year mismatch between prose and BibTeX (Step 12b), (2) missing citations — uncited tools, techniques, datasets, metrics (Step 12c), (3) semantic consistency — LLM-based claim-vs-title check (requires Claude Agent SDK). |
+| **Post-Process Module** | [scripts/tex_postprocess/](scripts/tex_postprocess/) | Self-contained Python package (stdlib only) implementing all pipeline steps; no external dependencies required. Key modules: `post_process.py` (orchestrator), `bib_sanitizer.py`, `normalize_citations.py`, `tex_checker.py`, `tikz_visual_validator.py`, `citation_context_checker.py`. |
 
 ---
 
@@ -160,62 +160,56 @@ All top-tier SE venues expect:
 | No Statistics | Raw numbers only | Add Wilcoxon + effect sizes |
 | Overclaiming | Claims exceed evidence | Scope claims precisely |
 | Bullet-heavy | Lists instead of prose | Write flowing paragraphs |
-| Bullets without leftmargin=* | No option listed for itemize or enumerate | Add leftmargin=* with package |
-| Use Dash | use dashes everywhere | Use comma or phrase which-is |
-| Overly use \emph or \textbf | Use many commands | Only use them when necessary |
-| Repeated expressions | One meaning is repeated with different wording  | Use concise expressions |
-| Missing references | ?? in pdf  | Consistent references |
+| Bullets without `leftmargin=*` | `itemize`/`enumerate` indented excessively | Add `[leftmargin=*]` (or use the `enumitem` package) |
+| Excessive em-dashes | Dashes used in place of commas or restructured clauses | Replace with commas, parentheses, or rewritten sentences |
+| Overuse of `\emph` / `\textbf` | Emphasis loses meaning when applied too often | Apply only where the emphasis is semantically necessary |
+| Redundant phrasing | The same meaning repeated with different wording | Collapse repeated meanings into a single concise expression |
+| Missing references | `??` in the rendered PDF | Re-run `bibtex` and recompile; ensure `\cite{}` keys match the `.bib` |
 ---
 
 ---
 
 ## Exemplar Writing Patterns (Final Step)
 
-After completing your draft, verify it follows these patterns observed in award-winning SE papers (CORAL [ICSE'23 Distinguished Paper], Ranger [ASE'23], Sembid [ASE'22]):
+After completing your draft, verify it follows these patterns commonly observed in well-received SE papers at top venues. Each pattern is illustrated with a **generic template** rather than named paper quotes — adapt to your domain.
 
 ### 1. Problem-Driven Narrative
 **Pattern:** Problem → Mechanism of Harm → Why Hard → Solution Directly Addresses Difficulty
 
-Each paper opens by showing *what breaks* (not just "affects X%"):
-- CORAL: "ineffective remediation could induce side effects, such as compilation failures"
-- Sembid: "users could still confront abnormal execution and crash after upgrades"
-- Ranger: "vulnerabilities persistent in the Maven ecosystem (e.g., the notorious Log4Shell)"
+Open by showing *what breaks* in concrete terms, not just an aggregate prevalence number. Strong opening sentences typically name a specific failure mode (compilation failure, runtime crash, exploited vulnerability, missed test, slow query) before any percentage figure appears.
 
 **Checklist:**
-- [ ] Does the problem statement name specific failures (build, crash, security)?
+- [ ] Does the problem statement name a specific failure (build, crash, security, performance)?
 - [ ] Is the difficulty explained (not just "existing tools are limited")?
 - [ ] Does the solution directly address the stated difficulty?
 
 ### 2. Empirical-First Structure
 **Pattern:** Empirical study → Findings motivate tool design → Tool evaluated against findings
 
-Strong papers don't just propose tools—they first *study the problem empirically*:
-- Sembid: "conducted an empirical study on 180 SemB issues to understand the root causes"
-- Ranger: "first carried out an empirical study to examine the prevalence of persistent vulnerabilities"
-- CORAL: empirical study reveals 21.55% vulnerabilities impossible to fix by upgrading
+Strong technique papers often begin with an empirical study of the problem on a non-trivial corpus, then derive design decisions from the empirical findings, and finally evaluate the tool against the same observations. The empirical preamble both justifies the design and provides ready-made baselines for the evaluation.
 
 **Checklist:**
 - [ ] Is there an empirical study/analysis before proposing the solution?
 - [ ] Do empirical findings directly motivate design decisions?
-- [ ] Does evaluation connect back to initial empirical observations?
+- [ ] Does the evaluation connect back to the initial empirical observations?
 
 ### 3. Concrete Quantitative Claims
 **Pattern:** Specific numbers with baselines and statistical context
 
-Avoid vague claims. Use precise numbers with comparisons:
-- "87.56% of vulnerabilities fixed (best competitor: 75.32%)"
-- "90.26% recall and 81.29% precision"
-- "detected over 3× more SemB APIs than unit tests"
+Avoid vague claims. Use precise numbers with explicit comparisons. For example:
+- "X.X% of [items] [outcome] (best competitor: Y.Y%)"
+- "X.X% recall and Y.Y% precision over [dataset]"
+- "detected over N× more [items] than [baseline]"
 
 **Checklist:**
-- [ ] Are all claims backed by specific percentages?
+- [ ] Are all claims backed by specific numbers?
 - [ ] Is there always a baseline for comparison?
 - [ ] Are improvements stated as concrete deltas (not "significantly better")?
 
 ### 4. Layered Contribution Structure
 **Pattern:** Mixed empirical + technical contributions, clearly enumerated
 
-Contributions combine study findings with technical novelty:
+Contributions in a technique paper typically combine study findings with technical novelty:
 ```
 1. Empirical study revealing [finding] on [N] subjects
 2. Technique/tool [Name] that [addresses finding]
@@ -226,19 +220,18 @@ Contributions combine study findings with technical novelty:
 ### 5. Memorable Tool Naming
 **Pattern:** Short, pronounceable names that hint at function
 
-- CORAL → "Compatible Remediation"
-- Ranger → "Range Restoration"
-- Sembid → "Semantic Breaking Issue Detector"
-- PANACEA → universal remedy (fitting for dependency healing)
+A good tool name is one or two syllables, easy to say aloud, and either an acronym whose expansion describes the function or a metaphor that maps to the domain (e.g., a name evoking the artefact's effect on the system). Avoid names already used by widely-known tools or trademarks.
 
 ### 6. Tight Problem-Solution Correspondence
 **Pattern:** Every difficulty mentioned must map to a solution component
 
+Build a small table linking each stated difficulty to the specific solution component that addresses it. If a difficulty appears in the introduction without a corresponding entry in the approach/evaluation, reviewers will notice — either drop the difficulty or add the component.
+
 | Stated Difficulty | Solution Component |
 |-------------------|-------------------|
-| "implicit constraints require domain knowledge" | LLM-based semantic reasoning |
-| "transitive conflicts invisible in project files" | dynamic resolution |
-| "compilation failures from incompatible fixes" | validation layer |
+| (e.g., "implicit constraints require domain knowledge") | (e.g., domain-aware reasoning module) |
+| (e.g., "cross-file dependencies invisible in single-file analysis") | (e.g., whole-program graph construction) |
+| (e.g., "downstream breakage from local fixes") | (e.g., validation/regression layer) |
 
 **If you state a difficulty but don't address it, reviewers will notice.**
 
