@@ -52,7 +52,7 @@ Order items as the reviewer wrote them — do not re-sort to a "more logical" or
 
 Two real macro families we have used:
 
-**Style A — OOPSLA-style (used in `Oopsla_2026_New_Remediation_____Lyuye/revision/response/major_response.tex`)**
+**Style A — OOPSLA-style (real example from an OOPSLA 2026 major-response document)**
 
 ```latex
 \newcommand{\pointRaised}[2]{\smallskip
@@ -111,7 +111,7 @@ Either macro family works — pick whichever the paper template already has, or 
 - **`\phantomsection \label{resp:meta-rN}` (or equivalent) before each item** for `\hyperref` linking from the top "how to read" box.
 - **Top-of-doc "how to read" callout box** (red-tint for OOPSLA conventions, yellow for ISSTA — match the venue's expectation) summarising how each meta-review item was addressed with `\hyperref` anchors. Reviewers triage in 30 seconds.
 - **Simple TOC** (Meta + each reviewer). Don't over-engineer with sub-entries.
-- **Strip ACM boilerplate from the response doc**: `\settopmatter{printacmref=false, printccs=false}`, drop abstract/keywords, `\renewcommand\footnotetextcopyrightpermission[1]{}`. The response is not a publication.
+- **Strip ACM boilerplate from the response doc when using `acmart`**: `\settopmatter{printacmref=false, printccs=false}`, drop abstract/keywords, `\renewcommand\footnotetextcopyrightpermission[1]{}`. If using the bundled `article` template, this is already handled. The response is not a publication.
 
 ### 3. Apply paper edits with visible discipline
 
@@ -135,7 +135,7 @@ The blue `\revision{...}` markup is the reviewer's signal that the paper actuall
 
 #### Diff-PDF generation (the "blue highlights" PDF the venue expects)
 
-For OOPSLA-style submissions where the venue asks for both the revised PDF and a *diff* PDF showing changes, use `latexdiff` with a custom post-processor for tables. A working pipeline is checked in at [`Oopsla_2026_New_Remediation_____Lyuye/revision/generate_diff.sh`](Oopsla_2026_New_Remediation_____Lyuye/revision/generate_diff.sh); the essential steps:
+For OOPSLA-style submissions where the venue asks for both the revised PDF and a *diff* PDF showing changes, use `latexdiff` with a custom post-processor for tables. If the current workspace already has a project-specific `generate_diff.sh`, adapt it; otherwise use the essential pattern below:
 
 ```bash
 #!/bin/bash
@@ -233,7 +233,7 @@ When the reviewer asks "why only N validations out of 1,000+?" use the **scarcit
 
 ### 5. Update the anonymized artifact (during revision, before camera-ready)
 
-Most SIGPLAN venues allow updating the supplementary artifact repo during the revision/rebuttal window — the PDF is frozen, the URL is not. Use this to add the PoC sub-study, new experiments, or expanded data.
+If the venue permits artifact updates during the revision/rebuttal window, use this to add the PoC sub-study, new experiments, or expanded data. Check the call/submission-system policy first: some venues or tracks freeze artifacts, require all changes to be disclosed, or impose additional anonymity constraints.
 
 **Anonymization checklist before pushing:**
 - Strip `/Users/<name>` paths from scripts; use relative paths.
@@ -275,7 +275,7 @@ The entrypoint script should print `Final: N pass, M fail` so a reviewer can see
 
 ## Style preferences
 
-- No em-dashes; en-dashes only for ranges.
+- Avoid em-dashes in paper prose if the project style avoids them; use en-dashes only for ranges.
 - No AI-flavour openers ("It is worth noting," "Importantly," "We thank the reviewer for…"). The thank-you belongs in the response doc once at the top of each reviewer section, not inside each item.
 - No structured "Finding./Impact./Summary." micro-labels appended to bullets.
 - Paper prose must not sound like a response to reviewer feedback. Phrases like "as noted by reviewers" or "we acknowledge that" belong in the response doc, not the paper.
