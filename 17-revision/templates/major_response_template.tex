@@ -1,0 +1,315 @@
+% =============================================================
+% MAJOR-REVISION RESPONSE-TO-REVIEWERS TEMPLATE
+% =============================================================
+% Distilled from a real OOPSLA major revision (response/major_response.tex
+% in the agent_remediation project). Adapt to your paper:
+%   1. Replace <TODO ...> placeholders with the real content.
+%   2. Keep one \section per reviewer (Meta + A + B + C + ...).
+%   3. Order items inside each section as the reviewer wrote them.
+%   4. For every promised change, immediately follow with the revised
+%      paper prose in a \shadedquotation block.
+%   5. Use \hyperref[resp:<label>]{...} to cross-link to other items
+%      whenever the same concern appears in multiple places.
+%
+% Conventions (style varies per venue/paper — adapt as needed):
+%   \pointRaised{<ReviewerID>}{<Quoted reviewer comment>}
+%   \reply{\responsed{<Your response, 2–4 sentences.>}}
+%   \revised{In Section~X, we added:}
+%   \begin{shadedquotation} <new paper text> \end{shadedquotation}
+%
+% =============================================================
+
+\documentclass[12pt]{article}
+\usepackage{url}
+\usepackage{vmargin}
+\setpapersize{USletter}
+\setmarginsrb{1in}{1in}{1in}{0.5in}{0pt}{0mm}{10pt}{0.5in}
+\usepackage{charter}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xspace}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage[many]{tcolorbox}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{pifont}
+\usepackage{cleveref}
+\usepackage{framed}
+\usepackage{quoting}
+\usepackage[x11names]{xcolor}
+\usepackage{caption}
+
+\setlength{\parskip}{1ex plus1ex minus1ex}
+\setlength{\parindent}{0pt}
+
+% --- Core macros (lift these as-is) ---------------------------
+\newcommand{\pointRaised}[2]{\smallskip
+{{\fontseries{b}\selectfont #1}: \textbf{#2}}\newline}
+\newcommand{\simplePointRaised}[1]{\bigskip \hrule\textsl{#1} }
+\newcommand{\reply}[1]{\textbf{{Response}}:\ {#1} \smallskip }
+\newcommand{\rev}[1]{\textcolor{black}{#1}}
+\newcommand{\revise}[1]{\textcolor{red}{#1}}
+\newcommand{\revised}[1]{\textcolor{blue}{#1}}
+\renewcommand{\rev}[1]{{\color{black}#1}}
+\renewcommand{\revise}[1]{{\color{red}#1}}
+\renewcommand{\revised}[1]{{\color{blue}#1}}
+\newcommand{\responsed}[1]{{\color{black}#1}}
+
+% Your tool/project name macro — rename or remove
+\newcommand{\tool}{\textit{<TOOL_NAME>}\xspace}
+\newcommand{\name}{\tool}
+
+\newcommand{\myfig}{Fig.\xspace}
+\newcommand{\mysec}{\S}
+\newcommand{\fixme}[1]{\textcolor{red}{#1}}
+
+% "How to read" callout box
+\DeclareRobustCommand{\mybox}[2][gray!20]{%
+\begin{tcolorbox}[
+        breakable,
+        left=0pt, right=0pt, top=0pt, bottom=0pt,
+        colback=#1, colframe=#1,
+        width=\linewidth,
+        enlarge left by=0mm,
+        boxsep=5pt,
+        arc=0pt, outer arc=0pt,
+        ]
+        #2
+\end{tcolorbox}
+}
+
+% "Revised paper text" environment — shaded box around quoted new prose
+\colorlet{shadecolor}{LavenderBlush2}
+\newenvironment{shadedquotation}
+ {\begin{shaded*}\quoting[leftmargin=0pt, vskip=0pt]}
+ {\endquoting\end{shaded*}}
+
+% =============================================================
+
+\title{Response to Reviewers' Comments\\[0.3em]
+\large <TODO: Paper title here>
+}
+
+\begin{document}
+\maketitle
+
+\textit{We sincerely thank the reviewers and the program committee for their
+careful reading of our paper and their constructive comments. We have
+thoroughly revised the manuscript to address all points raised. Below, we
+provide our point-by-point response in the following format:}
+
+\tableofcontents
+\bigskip
+
+% --- "How to read this rebuttal" callout ---------------------
+\mybox[red!8]{
+{\Large\textcolor{red!70!black}{\textbf{How to read this rebuttal}}}
+
+\begin{quote}
+\pointRaised{Reviewer-A}{Comments or Questions from Reviewer A}
+\end{quote}
+
+\begin{quote}
+\reply{\responsed{Response to Reviewer A's comments and questions.}}
+\end{quote}
+
+\begin{quote}
+\revised{In Section~x, we added:}
+\begin{shadedquotation}
+\responsed{Revised manuscript text appears in this shaded block.}
+\end{shadedquotation}
+\end{quote}
+}
+
+%% ============================================================
+%% META-REVIEW (REQUIRED CHANGES)
+%% ============================================================
+\section{Response to Meta-Review}
+\label{sec:meta}
+
+% --- Meta-R1 -------------------------------------------------
+\phantomsection
+\label{resp:meta-r1}
+\pointRaised{Meta-R1}{<TODO: Quote the first meta-review item verbatim.>}
+
+\reply{\responsed{%
+<TODO: 2–4 sentences. Acknowledge the point, answer it directly, name the
+section that will change.>
+}}
+
+\revised{In Section~<X.Y>, we added:}
+\begin{shadedquotation}
+\responsed{<TODO: Paste the new paper prose verbatim. This should match
+exactly what now appears in the revised PDF (in blue \revision{...}).>}
+\end{shadedquotation}
+
+% Optionally include a table/figure that you added to the paper
+% \begin{table}[h]
+% \centering
+% \caption{<Caption matching the new table in the paper.>}
+% \label{tab:<new-table>}
+% \begin{tabular}{...}
+%   ...
+% \end{tabular}
+% \end{table}
+
+% --- Meta-R2 -------------------------------------------------
+\bigskip
+\phantomsection
+\label{resp:meta-r2}
+\pointRaised{Meta-R2}{<TODO: Quote the second meta-review item verbatim.>}
+
+\reply{\responsed{%
+<TODO: Response. Use \\\\ between paragraphs inside the reply when needed.
+Use \begin{itemize}...\end{itemize} for enumerated sub-arguments — wrap each
+item body in \responsed{...} so the colour stays consistent.>
+\\\\
+\textbf{(1) <Sub-point header>.} <Sub-point body.>
+\\\\
+\textbf{(2) <Sub-point header>.} <Sub-point body.>
+\\\\
+\textbf{(3) <Sub-point header>.} <Sub-point body.>
+\begin{itemize}
+\item \responsed{\textbf{<Bullet header>:} <Bullet body, including numeric
+results when relevant.>}
+\item \responsed{\textbf{<Bullet header>:} <Bullet body.>}
+\end{itemize}
+\responsed{<Optional closing paragraph that ties the bullets together and
+references prior work or sibling responses.>}
+}}
+
+\revised{In Section~<X.Y>, we added:}
+\begin{shadedquotation}
+\responsed{<TODO: New paper prose.>}
+\end{shadedquotation}
+
+% --- Cross-link pattern --------------------------------------
+% When the same concern is raised in two places, cross-reference instead of
+% repeating yourself:
+%   See also \hyperref[resp:comment-c1]{Comment~C1} for related discussion.
+
+% --- Repeat for Meta-R3, Meta-R4, ... ------------------------
+
+
+%% ============================================================
+%% REVIEWER A (Overall merit: <score, short label>)
+%% ============================================================
+\section{Response to Reviewer A}
+\label{sec:reviewer-a}
+
+% --- Reviewer's explicit questions first ---------------------
+\bigskip
+\phantomsection
+\label{resp:question-aq1}
+\pointRaised{Question A-Q1}{<TODO: Quote the question verbatim.>}
+
+\reply{\responsed{%
+<TODO: Direct answer, 2–4 sentences. If you have a concrete number that
+answers the question, lead with it.>
+}}
+
+\revised{In <Section / RQ>, we added:}
+\begin{shadedquotation}
+\responsed{<TODO: New paper prose.>}
+\end{shadedquotation}
+
+\bigskip
+\phantomsection
+\label{resp:question-aq2}
+\pointRaised{Question A-Q2}{<TODO: Quote question.>}
+
+\reply{\responsed{%
+<TODO: Response.>
+}}
+
+\revised{In Section~<X.Y>, we added:}
+\begin{shadedquotation}
+\responsed{<TODO: New paper prose.>}
+\end{shadedquotation}
+
+% --- Then the reviewer's detailed comments -------------------
+\bigskip
+\phantomsection
+\label{resp:comment-a3}
+\pointRaised{Comment A3}{<TODO: Quote the reviewer's longer comment
+verbatim. Even if only part is actionable, keep the whole comment — the
+surrounding framing shows you understood the point.>}
+
+\reply{\responsed{%
+<TODO: Response. Acknowledge the legitimate part of the critique even when
+you don't fully concede. If you concede, narrow the claim; don't hedge it
+with a three-word qualifier.>
+\\\\
+<TODO: Optional second paragraph with numeric evidence or a worked example.
+Cross-link to other items if relevant:>
+See also \hyperref[resp:question-aq1]{Question~A-Q1} for the quantitative
+breakdown.
+}}
+
+\revised{In Section~<X.Y>, we added:}
+\begin{shadedquotation}
+\responsed{<TODO: New paper prose, possibly multi-paragraph. If the new
+content is large, split into multiple \begin{shadedquotation}...
+\end{shadedquotation} blocks anchored to different sections of the paper.>}
+\end{shadedquotation}
+
+% --- Repeat for Comment A4, A5, ... --------------------------
+
+
+%% ============================================================
+%% REVIEWER B (Overall merit: <score>)
+%% ============================================================
+\section{Response to Reviewer B}
+\label{sec:reviewer-b}
+
+\bigskip
+\phantomsection
+\label{resp:question-bq1}
+\pointRaised{Question B-Q1}{<TODO: Quote.>}
+
+\reply{\responsed{%
+<TODO: Response.>
+}}
+
+\revised{In Section~<X.Y>, we added:}
+\begin{shadedquotation}
+\responsed{<TODO: New paper prose.>}
+\end{shadedquotation}
+
+% --- Repeat ---
+
+
+%% ============================================================
+%% REVIEWER C (Overall merit: <score>)
+%% ============================================================
+\section{Response to Reviewer C}
+\label{sec:reviewer-c}
+
+\bigskip
+\phantomsection
+\label{resp:question-cq1}
+\pointRaised{Question C-Q1}{<TODO: Quote.>}
+
+\reply{\responsed{%
+<TODO: Response.>
+}}
+
+\revised{In Section~<X.Y>, we added:}
+\begin{shadedquotation}
+\responsed{<TODO: New paper prose.>}
+\end{shadedquotation}
+
+% --- Repeat ---
+
+
+%% ============================================================
+%% BIBLIOGRAPHY (only if response cites things)
+%% ============================================================
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{response}
+
+\end{document}
