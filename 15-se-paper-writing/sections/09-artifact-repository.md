@@ -13,7 +13,8 @@ Create a self-contained repository that allows reviewers and future researchers 
 - **Understand** the tool's architecture from the README alone
 - **Run** the tool on new inputs beyond the paper's dataset
 
-The repo link is embedded in the paper's Data Availability section so reviewers can inspect it during review.
+The repo link is embedded in the paper's Data Availability section so reviewers can inspect it during review. 
+The artefact repository is better placed under the project folder if available.
 
 ---
 
@@ -75,6 +76,16 @@ Double-blind venues require the artifact to be anonymous during review:
 - [ ] **Tool name is OK** — tool names (e.g., "Astra") are conventional and not deanonymizing
 - [ ] **Commit messages are generic** — e.g., "Initial artifact release" (not "John's fix for RQ2")
 - [ ] **Config files sanitized** — no hardcoded paths like `/home/username/...`
+- [ ] **No internal version markers in filenames or paths** — reviewers do not have the developer-side history. File names like `benchmark_v5.json`, `results_v6.json`, `strict_all_v3.json`, `diff_v3_v4.py`, `rq2/v6.json`, or `rq4_prevalence/` (when the paper has only RQ1–RQ3) leak development trajectory and confuse readers. Use semantic names (`benchmark_50.json`, `ablation.json`, `strict_all.json`) and rename the older snapshot to `strict_all_legacy.json` or drop it entirely. The same rule applies to directory names: `rq3_baselines/` is wrong if the paper places baselines under RQ1; use `rq1/baselines/`. Audit before commit:
+
+```bash
+# Filenames containing v<digit>
+find . -type f \( -name "*v[0-9]*.json" -o -name "*v[0-9]*.py" \)
+# In-content references to versioned datasets / paths
+grep -rn "ground_truth_v\|strict_all_v[0-9]\|rq[0-9]_[a-z]*/v[0-9]" --include='*.json' --include='*.md' --include='*.py'
+# RQ-folder names that don't match the paper's RQ numbering
+ls results/
+```
 
 ---
 
@@ -85,7 +96,8 @@ The README is the single most important file. Reviewers read it first and may no
 ```markdown
 # [ToolName]: [One-Line Description]
 
-Artifact repository for the paper "[Paper Title]" submitted to [Venue Year].
+Artifact repository for [main topic of the paper without title].
+
 
 ## Overview
 

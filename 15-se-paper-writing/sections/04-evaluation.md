@@ -354,6 +354,7 @@ Baseline & 33/50 & 66\% & --- \\
 - [ ] Each RQ has results → comparison → error analysis → "Answering RQ"
 - [ ] "Answering RQ" boxes at END of each subsection
 - [ ] Statistical tests with effect sizes included
+- [ ] Every evaluation-time threshold (p-value cutoff, agreement level, top-k, decision boundary, frequency floor, etc.) is justified in-text — via sensitivity analysis on the actual data or citation to prior work. Bare values are flagged by reviewers as arbitrary tuning.
 - [ ] Ablation study present
 - [ ] Tables use booktabs formatting
 - [ ] After RQs, no need to add a discussion subsection which should be placed in the discussion sections for empirical studies. 

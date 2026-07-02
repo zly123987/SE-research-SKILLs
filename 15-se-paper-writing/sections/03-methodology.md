@@ -506,6 +506,7 @@ scripts will be available on Zenodo upon publication.
 - [ ] Written as flowing prose (no bullet lists)
 - [ ] Each component has technical depth
 - [ ] Design decisions are justified (WHY, not just WHAT)
+- [ ] Every threshold/cutoff introduced in the methodology (similarity, confidence, top-k, window size, agreement level, etc.) is justified in-text — via empirical sweep, prior-work citation, or formal derivation. No arbitrary "we use 0.7".
 - [ ] Running example walkthrough included
 - [ ] Novel contribution has dedicated subsection
 - [ ] Algorithms formatted professionally (if used)

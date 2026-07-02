@@ -104,6 +104,38 @@ When under budget, invest extra space in this priority order:
 - [ ] Every contribution bullet mapped to a validating RQ or section
 - [ ] Numbers consistent across abstract, intro, evaluation, conclusion
 - [ ] No "orphan claims" (claims without supporting evidence)
+- [ ] Every threshold/cutoff stated in the paper has a verifiable justification (sensitivity sweep, prior-work citation, or formal derivation) — see Section 3.5
+
+### 3.5 Threshold Justification Audit
+
+Every numeric threshold or cutoff in the paper must be justified. Grep the
+manuscript for cutoffs and verify each one has a reason a reviewer can
+check.
+
+**Grep targets** (run on `main.tex`):
+```bash
+grep -nE 'top[- ]?(k|[0-9]+)|≥ *0\.|>= *0\.|>=? *0\.|p *< *0\.|threshold|cutoff|similarity|confidence|agreement|window|frequency' main.tex
+```
+
+**For each hit, the surrounding prose must contain one of:**
+1. An **empirical sweep**: "we swept τ ∈ {0.5, 0.6, 0.7, 0.8} and selected
+   0.7 as the knee point (Fig. N)"
+2. A **prior-work citation**: "following the threshold of 0.7 used by
+   Smith et al. [N] for the same task"
+3. A **formal derivation**: "τ corresponds to the 95th percentile of the
+   negative-class similarity distribution (§4.2)"
+
+**Common failures (reviewer red flags):**
+- "We use a similarity threshold of 0.7" with no citation, no sweep, no derivation
+- "Top-5 results were retained" with no rationale for 5
+- "p < 0.05" cited without naming the test and correction (if multiple tests)
+- "Cohen's κ ≥ 0.8 was considered substantial agreement" without citing
+  Landis & Koch or equivalent
+- Inter-rater agreement threshold chosen post-hoc to match the data
+
+**If a threshold cannot be justified, either:**
+- Run the sweep/sensitivity analysis and add a paragraph + figure, OR
+- Remove the hard threshold and report ranked/continuous results instead
 
 ### Abstract → Evaluation Mapping
 

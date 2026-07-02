@@ -380,6 +380,43 @@ Each hit deserves a manual review; most should be replaced.
 
 ---
 
+## Use `\texttt{...}` Sparingly (HARD RULE)
+
+`\texttt{}` (and `\code{}`/`\path{}`) is for code, not for emphasis. Every monospace span tells the reader "this is a literal identifier you must read carefully." When the span isn't actually a literal identifier, the reader pays a comprehension cost for no information gain — and the page acquires a noisy, code-dump appearance that signals undisciplined drafting.
+
+**Use `\texttt{}` only when the literal token matters.**
+
+| Use `\texttt{}` | Don't use `\texttt{}` |
+|-----------------|----------------------|
+| Function or method signatures the reader must match against the artefact (`\texttt{compose\_and\_test\_rce}`) | Library names already obvious from prose ("the Bottle library" not "the \texttt{bottle} library") |
+| Specific API calls referenced in a code listing or formal definition (`\texttt{escape}` in $\bp(\texttt{escape})$) | General library names mentioned in passing |
+| Exact configuration values, error codes, file paths, or shell commands | Common compound nouns ("URL-encoding" not "\texttt{URL}-encoding") |
+| Symbols whose typographic identity (case, punctuation, special characters) carries semantic meaning | Quoted concepts ("the trust marker" not "\texttt{trust\_marker}") |
+| Code-listing fragments (`Markup("hello")`) | Repeated mentions of the same library on every line of a paragraph |
+
+**Specific rules:**
+- **Library names**: write naturally on first mention (e.g., "we use Bottle for the demo"); use `\texttt{}` only when the library's literal package identifier matters (`pip install bottle` example, or distinguishing `bottle` the package from the noun "bottle"). Once introduced, repeat references in plain text.
+- **Method/API names mentioned in passing**: spell out in prose. *"`escape` then `unquote`"* → "the escape step, then the URL-decode step" — unless we are specifically tracking the call sequence's literal identifiers.
+- **CWE/CVE identifiers**: never `\texttt{}` (e.g., write `CWE-79`, not `\texttt{CWE-79}`).
+- **Concept names** (HMAC, XSS, JSON, etc.): never `\texttt{}` — they are concepts, not literal tokens.
+- **Configuration parameters quoted in prose**: only if the literal name and value matter; otherwise describe ("set HMAC verification to strict mode" not "set \texttt{verify=True}").
+
+**Bad** (acceptable in a code listing, intolerable in flowing prose):
+> *We compose `\texttt{markupsafe.escape}` with `\texttt{urllib.parse.unquote}` in a typical `\texttt{Flask}` view, then render the result via `\texttt{render\_template}`. The `\texttt{Markup}` wrapper marks the string trusted...*
+
+**Good** (one literal identifier per pair, prose for the rest):
+> *We compose markupsafe's escape function with urllib's URL-decode in a typical Flask view, then render the result via the template engine. The Markup wrapper marks the string trusted...*
+
+**Pre-submission check** (run before submission):
+```bash
+grep -c '\\texttt{' main.tex
+```
+A typical 18-page security paper carries 30–80 `\texttt{}` spans. If your count is over 150, the prose is over-monospaced; revisit each occurrence and ask whether the literal token matters or whether prose would carry the meaning.
+
+**Heuristic for borderline cases:** if you can read the sentence aloud and the listener cannot tell whether a span was monospaced or not, the monospace was unnecessary.
+
+---
+
 ## Tone Guidelines
 
 ### Be Humble About Comparisons
@@ -446,6 +483,67 @@ If a table already shows the results, do NOT add a bar chart of the same numbers
 
 **Rule:** One visualization per dataset. Every float must earn its column-inches.
 
+## Confident Soft-Positioning, Never Apologetic Hedging (HARD RULE)
+
+In academic papers, **never undermine novelty with apologetic hedges, even when trying to sound rigorous.** Reviewers do not reward "honesty" disclaimers like *"we make no claim X is new"* or *"the contribution is not Y"* — they read those as the authors admitting no real contribution exists, which collapses to *"then why publish?"*. There is no path on which a reviewer accepts a paper because the authors voluntarily wrote that they have no novelty.
+
+**Soft tone $\neq$ apologetic tone.** A *soft* claim says "we found something meaningful that others overlooked." An *apologetic* claim says "we did not find the most important thing ever." The first invites the reviewer to agree; the second invites them to reject.
+
+### Banned phrasings
+
+These structures negate a claim without supplying a positive replacement claim. They read as concessions of inadequacy:
+
+- *"We make no claim that..."*
+- *"The contribution is not the discovery of..."*
+- *"The novelty of the paper is not..."*
+- *"We do not claim X is new / novel / the first..."*
+- *"Some of these are well-known..."* (as a leading sentence of a contribution-positioning paragraph)
+- Any sentence whose grammatical structure is *negation of claim X* without a *positive replacement claim Y*.
+
+### Preferred phrasings
+
+These affirm meaningfulness with confident soft-positioning. They name what the work does, what it identifies, what it deliberately includes, never what it lacks:
+
+- *"Our position is that these compositions form a coherent attack surface that current tooling overlooks..."*
+- *"The benchmark deliberately mixes X with Y because [positive reason]..."*
+- *"We include both kinds because the empirical finding concerns A rather than B..."*
+- *"Together these results identify [structural gap / blind spot / attack surface] that [stakeholders] systematically overlook."*
+- *"We retain X deliberately, because [reason that strengthens the case]."*
+
+### Reframing weaker exemplars
+
+If your benchmark contains items some reviewer might call "already known," do not call them "limitations of the benchmark." Reframe them as deliberate design choices that strengthen the structural argument:
+
+- ❌ *"Three of our patterns are already documented in prior literature."*
+- ✅ *"Three of our patterns echo single-library pitfalls already discussed in the literature; we include them as documented-but-undetected cases that sharpen the tooling-gap argument: if the standard analyser stack misses even the textbook composition pitfalls, it will also miss the genuinely emergent ones."*
+
+### Where the apologetic temptation is strongest (be vigilant)
+
+- **Abstract closing sentences** — do not end with a hedge; end with a positioning claim.
+- **Intro lead-in to contributions** — open with assertive position, not with concession.
+- **Discussion subsections that compare to prior work** — don't admit overlap; reframe as deliberate scope choice.
+- **Threats-to-validity sections** — state the threat *and* the mitigation, never the threat alone.
+
+### Worked rewrites
+
+**Apologetic (bad):**
+> *Our contribution is the formalisation, the detector, and the benchmark that together expose this analysis gap; we make no claim that every individual pattern in the benchmark is newly discovered.*
+
+**Soft-positioning (good):**
+> *Together these results identify a coherent attack surface — composition-level assumption gaps between independently-correct libraries — that current security tooling and ecosystem advisories systematically overlook, and provide a formal definition, an automated detector, and a public benchmark for studying it.*
+
+**Apologetic (bad):**
+> *The contribution of this paper is not the discovery of new vulnerability primitives but the structural argument that a recurring class of security failures lives at the library-composition boundary.*
+
+**Soft-positioning (good):**
+> *Our position is that these compositions are not isolated curiosities but a coherent attack surface that the standard analyser stack overlooks; the paper develops the formal vocabulary, the automated detector, and the empirical evidence to make that case.*
+
+**Apologetic (bad):**
+> *The novelty of the paper is not the empirical discovery of every single pair we study.*
+
+**Soft-positioning (good):**
+> *The benchmark deliberately mixes patterns that are emergent from composition with patterns whose single-library aspects are already established in the security literature.*
+
 ## Checklist
 
 - [ ] Claims are precise with numbers
@@ -456,7 +554,10 @@ If a table already shows the results, do NOT add a bar chart of the same numbers
 - [ ] Consistent voice (we vs impersonal)
 - [ ] Numbers formatted correctly
 - [ ] Non-breaking spaces before citations/refs
-- [ ] Humble tone in comparisons
+- [ ] Humble tone in comparisons (humble $\neq$ apologetic)
+- [ ] No "we make no claim" / "the contribution is not" hedges
+- [ ] Abstract and intro contributions open with positive positioning
+- [ ] Documented-but-undetected items framed as evidence-strengthening
 - [ ] Limitations acknowledged
 - [ ] All tables fit column width — zero overfull hbox from tables
 - [ ] No redundant table+figure pairs showing the same data

@@ -148,6 +148,14 @@ All top-tier SE venues expect:
 - **Artifact/replication package** expected (not always mandatory)
 - **Threats to validity section** required
 - **Statistical analysis** with effect sizes for empirical claims
+- **Threshold justification (HARD RULE)**: every numeric threshold or cutoff
+  appearing in the paper (similarity ≥ X, confidence > Y, top-k, agreement
+  level, p-value cutoff, window size, frequency floor, decision boundary,
+  etc.) MUST be justified in-text by one of: (a) an empirical sweep /
+  sensitivity analysis on the actual data, (b) a citation to prior work that
+  uses the same value for the same purpose, or (c) a formal derivation. A
+  bare "we use 0.7" without a verifiable reason is treated by reviewers as
+  arbitrary tuning and is a common ASE/ICSE rejection cause.
 
 ---
 
