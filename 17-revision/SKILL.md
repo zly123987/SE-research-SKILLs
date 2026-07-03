@@ -281,7 +281,7 @@ If a dependency only exists for `amd64`, document that in the README so reviewer
 | Anonymity leak via push history | Use a pre-existing anonymous git account; check `git log --pretty=format:%ae` before pushing |
 | Stratum skew without justification | If your validation sample is heavier in one class than the original distribution, explain the structural reason (resource scarcity, validation-cost asymmetry, intentional oversampling of edge cases) — don't hide it |
 | Promising experiments you can't run | Don't write "we will additionally evaluate X in the camera-ready" unless X is genuinely feasible. Reviewers remember these promises |
-| Paper page-limit overrun after additions | Adding a new RQ / new tables / new method prose pushes the paper past the venue cap — condense related work and existing evaluation prose first; move detail tables to the appendix; keep the diff "old text removed, new text added" at roughly equal size (already a Section 3 rule) |
+| Paper page-limit overrun after additions (which is not a problem during draft phase) | Adding a new RQ / new tables / new method prose pushes the paper past the venue cap — condense related work and existing evaluation prose first; move detail tables to the appendix; keep the diff "old text removed, new text added" at roughly equal size (already a Section 3 rule) |
 
 ## Reproducibility checklist before final push
 
