@@ -283,12 +283,87 @@ If a dependency only exists for `amd64`, document that in the README so reviewer
 | Promising experiments you can't run | Don't write "we will additionally evaluate X in the camera-ready" unless X is genuinely feasible. Reviewers remember these promises |
 | Paper page-limit overrun after additions (which is not a problem during draft phase) | Adding a new RQ / new tables / new method prose pushes the paper past the venue cap — condense related work and existing evaluation prose first; move detail tables to the appendix; keep the diff "old text removed, new text added" at roughly equal size (already a Section 3 rule) |
 
+## Final QA checklist for the two PDFs
+
+Run after the last edit. The reproducibility checklist below covers the *artifact*; this one
+covers the *paper* and the *response doc*. Every item here fails **silently** — a PDF that looks
+fine can still ship a `??`, a heading that vanished, or a quote that no longer matches the paper.
+
+### Build integrity — full build, then grep the log
+
+A single `pdflatex` pass after touching the `.bbl` prints `[?]` for every citation. That is a
+build artifact, not a real error; never diagnose from a one-pass build.
+
+```bash
+# run inside each of: paper dir, response dir
+pdflatex -interaction=nonstopmode main >/dev/null; bibtex main >/dev/null
+pdflatex -interaction=nonstopmode main >/dev/null; pdflatex -interaction=nonstopmode main >/dev/null
+echo "undefined citations: $(grep -ci 'Citation.*undefined' main.log)"   # want 0
+echo "undefined refs (??): $(grep -ci 'Reference.*undefined' main.log)"  # want 0
+echo "overfull hboxes:     $(grep -c 'Overfull .hbox' main.log)"
+```
+
+- [ ] 0 undefined citations **and** 0 undefined refs in **both** documents.
+- [ ] The response doc has its **own** `.bib` — every citation added to the paper must be added there too, or it silently renders `[?]`.
+- [ ] A `\ref{}` in the response pointing at a *paper* label always renders `??` (separate documents). Use plain text ("Table 1") or a label local to the response.
+- [ ] Every `\hyperref[...]`/`\autoref` target exists; actually click the ToC and the cross-links in the response PDF.
+- [ ] Render the changed pages as images and **look** — tables overflowing the column and lost headings do not show up in the log.
+
+### Revision markup renders as intended
+
+- [ ] `\revision{}` wrapped **around a float** does not colour it (the float is typeset after the colour group closes). Put `\color{revisionblue}` *inside* the float, and use `\caption{\revision{...}}`.
+- [ ] Never wrap a sectioning command: `\revision{\subsection{X}}` can make the heading **disappear** (run-in `\@startsection`). Write `\subsection{\revision{X}}`.
+- [ ] Coloured/shaded blocks must not leak past a page break — use a breakable `tcolorbox` with `coltext`, not `framed`+`\color`.
+- [ ] All placeholder macros resolved: `grep -c todoData *.tex tex/*.tex` → 0 before submission.
+- [ ] A clean build (redefine `\long\def\revision#1{#1}` in a copied main) compiles and is fully black — venues often want both the marked-up and a clean PDF.
+
+### Response ↔ paper sync (audit every quoted block)
+
+After several edit rounds the response drifts from the paper. This is the most common silent defect.
+
+- [ ] Every "In Section X we added:" block is **copy-pasted** from the current paper, not retyped or paraphrased.
+- [ ] No **duplicate/stale** quote boxes for the same section — an older copy survives when text is revised twice.
+- [ ] Section numbers cited in the response still resolve to the intended section (numbers shift as content moves).
+- [ ] Every reviewer quote is **verbatim** from the review file — never `\ldots`-truncated in a way that softens the criticism.
+
+```bash
+# normalise both, then flag any quoted sentence that no longer exists in the paper
+python3 - <<'PY'
+import re
+def norm(t):
+    t = re.sub(r"\\(cite|ref|label)\{[^}]*\}", "", t)
+    t = re.sub(r"[\\{}~]", " ", t)
+    return re.sub(r"\s+", " ", t).lower()
+paper = norm(open("paper/tex/content.tex").read())
+resp  = open("response/main.tex").read()
+for i, body in enumerate(re.findall(r"\\begin\{shadedquotation\}(.*?)\\end\{shadedquotation\}", resp, re.S), 1):
+    for chunk in [c.strip() for c in re.split(r"(?<=[.:;])\s", norm(body)) if len(c.strip()) > 45]:
+        if chunk[:70] not in paper:
+            print(f"[BLOCK {i}] NOT IN PAPER: {chunk[:100]}")
+PY
+```
+
+### Numbers, claims, coverage
+
+- [ ] Every number in the response appears identically in the paper **and** traces to a script/artifact output — no number that only exists in prose.
+- [ ] Paper-internal consistency: abstract, body, findings, and conclusion use the same figure **and the same word for it** (e.g. "functions" vs "methods").
+- [ ] Multi-step counts add up (sampled − excluded = retained). Re-grep every old number after any recount.
+- [ ] Every meta-review point and every reviewer comment has a visible response; nothing silently dropped.
+- [ ] Terminology renames applied everywhere: `grep -ci "<old term>"` → 0 in both documents.
+- [ ] No promise you cannot keep. If an analysis was not run, say so plainly rather than phrasing it so it reads as done.
+
 ## Reproducibility checklist before final push
 
 - [ ] Every numeric claim in the response doc matches the paper PDF and the artifact data; no stale numbers from a prior draft.
 - [ ] Headline-result script / `make` target / `docker run` produces the same number a reviewer would read in the paper, from a fresh clone, in under 30 seconds of human attention.
 - [ ] Container image (if any) builds on both `linux/amd64` and `linux/arm64`, or the platform constraint is documented.
 - [ ] No `/Users/<name>` (or `/home/<name>`) paths, no `git config` author leak, no institutional URL anywhere in the artifact.
+- [ ] **Scan for live credentials, not just paths.** A hard-coded LLM/API key in a helper script is a real, usable secret — grep the whole tree, then **redact it AND rotate it** (redacting a leaked key does not un-leak it):
+  ```bash
+  grep -rniaI -E "(sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{36}|github_pat_|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|xox[baprs]-|BEGIN [A-Z ]*PRIVATE KEY)" . --exclude-dir=.git
+  ```
+- [ ] **Author identity hides in git history even when no tracked file leaks it.** `git log --all --format='%an | %ae' | sort -u` on the artifact repo; if it is not an anonymous account, ship `.git`-free (`git archive`) rather than copying the folder.
+- [ ] Artifact README / file-structure section updated for every dataset and script added during the revision.
 - [ ] Response doc compiles cleanly; every paper-quote block matches the revised PDF exactly (copy-paste, don't retype).
 - [ ] Paper PDF page count within the venue limit AFTER all blue additions land; no overfull hboxes in revised regions.
 - [ ] Bib entries verified against Crossref / DBLP for every new citation, AND the whole `.bib` run through a bib-checker (e.g., `bibtex-tidy --check-quality` locally, or `https://bib-check.remedius.cc/`).
